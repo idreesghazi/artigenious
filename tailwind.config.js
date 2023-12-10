@@ -18,6 +18,14 @@ module.exports = {
         poppins: ['Poppins', 'sans-serif'],
         smooch: ['Smooch Sans', 'sans-serif'],
       }, 
+      spacing: {
+        '120': '30rem',
+        '130': '40rem',
+      },
+      fontSize: {
+        '11xl': '11rem',
+       
+      },
     },
   },
   plugins: [],
