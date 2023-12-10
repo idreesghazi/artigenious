@@ -5,7 +5,7 @@ import Link from 'next/link';
 import orangeLogo from '../images/orangeLogo.png'
 import textArti from '../images/textArti.png'
 import apocCatHome from '../images/apocCatHome.png'
-import loginImage from '../images/loginImage'
+import loginImage from '../images/loginImage.png'
 
 export default function Login() {
   

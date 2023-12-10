@@ -24,7 +24,7 @@ export default function Home() {
           <a href='#home' className='font-mont font-semibold text-black hover:text-orange-400 text-xl'>Home</a>
           <a href='#services' className='font-mont font-semibold text-black hover:text-orange-400 text-xl'>Services</a>
           <a href='#packages' className='font-mont font-semibold text-black hover:text-orange-400 text-xl'>Packages</a>
-          <Link href='/screens/login'>
+          <Link href='/login'>
           <button  className='font-mont font-semibold text-[#8155FF] duration-100 transition-transform hover:scale-110 hover:text-blue-900 text-xl'>Login</button>
           </Link>
         </div>
