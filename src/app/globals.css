@@ -21,8 +21,7 @@ body {
   position: absolute;
   bottom: 50px;
   right: 50px;
-  background-color: #007bff;
-  color: #4c2828;
+  background-color: #fffaf3cb;
   cursor: pointer;
   border-radius: 50%;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
@@ -31,13 +30,13 @@ body {
 }
 
 .chat-button:hover {
-  background-color: #0056b3;
+  background-color: #FFFAF3;
   transform: scale(1.1);
 
 }
 
 .chat-button.open {
-  background-color: #dc3545;
+  background-color: #846effd1;
 }
 
 .chatbox {
@@ -46,7 +45,7 @@ body {
   right: 70px;
   padding: 10px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
-  border-radius: 5px;
+  border-radius: 30px;
 
 }
 

@@ -114,7 +114,7 @@ export default function Home() {
   };
 
   return (
-    <div className='bg-[#FFFFFF]'>
+    <div className='bg-[#FFFAF3]'>
       <div className='header flex p-12 w-full justify-between'>
         <div className='flex'>
           <div className='transition-transform duration-100 hover:scale-110'>
@@ -211,7 +211,7 @@ export default function Home() {
                   type="text"
                   name="message"
                   placeholder="Type your message..."
-                  className="flex-1 px-4 py-2 bg-white text-black rounded-lg border  focus:outline-none focus:ring focus:border-blue-500"
+                  className="flex-1 px-4 py-2 bg-white text-black rounded-2xl border  focus:outline-none focus:ring focus:border-blue-500"
                   disabled={isLoading} // Disable the input if loading is true
                 />
                 <button
