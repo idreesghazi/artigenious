@@ -1,6 +1,13 @@
+"use client";
 import Image from 'next/image'
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import Link from 'next/link';
+
 
 import orangeLogo from '../images/orangeLogo.png'
 import textArti from '../images/textArti.png'
@@ -13,9 +20,50 @@ import facebookIcon from '../images/facebook.png'
 import design from '../images/design.png'
 
 export default function Login() {
-  
+  const router = useRouter();
+
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    dob: '',
+    password: '',
+    confirmPassword: '',
+  });
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log(formData);
+    if (formData.password !== formData.confirmPassword) {
+      toast.error('Passwords do not match!');
+      return;
+    }
+    // Send data to the API for registration
+    const res = await fetch('http://localhost:3000/api/persona', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    });
+    const data = await res.json();
+    if (data.success) {
+      toast.success('Signup successful! Redirecting to login...');
+      setTimeout(() => {
+        router.push('/login'); // Replace '/login' with your login page route
+      }, 5000);
+    } else {
+      toast.error(data.message);
+    }
+  };
+
   return (
+    
     <div className='bg-[#FFFFFF] w-full flex justify-center items-center px-20 py-10 space-x-40'>
+      <ToastContainer />
       <div className='text-center'>
         <div className='absolute left-0 bottom-24'>
           <Image src={design} className='w-16' />
@@ -26,21 +74,21 @@ export default function Login() {
         <h2 className='font-poppins text-xl'>We are glad to have you!</h2>
         <div class="flex flex-col space-y-5">
           <div class="relative flex space-x-20">
-            <input type="text" placeholder="First Name" class="pl-6 pr-4 py-5 bg-[#F2F2F2] border-0 rounded-2xl w-80 focus:border-black font-poppins" />
-            <input type="text" placeholder="Last Name" class="pl-6 pr-4 py-5 bg-[#F2F2F2] border-0 rounded-2xl w-80 focus:border-black font-poppins" />
+            <input type="text" name='firstName' onChange={handleChange} placeholder="First Name" class="pl-6 pr-4 py-5 bg-[#F2F2F2] border-0 rounded-2xl w-80 focus:border-black font-poppins" />
+            <input type="text" name='lastName' onChange={handleChange} placeholder="Last Name" class="pl-6 pr-4 py-5 bg-[#F2F2F2] border-0 rounded-2xl w-80 focus:border-black font-poppins" />
           </div>
           <div class="relative flex space-x-20">
-            <input type="email" placeholder="Your Email" class="pl-6 pr-4 py-5 bg-[#F2F2F2] border-0 rounded-2xl w-80 focus:border-black font-poppins" />
-            <input type="date" placeholder="Date of Birth dd/mm/yy" class="pl-6 pr-4 py-5 bg-[#F2F2F2] border-0 rounded-2xl w-80 focus:border-black font-poppins" />
+            <input type="email" name='email' onChange={handleChange} placeholder="Your Email" class="pl-6 pr-4 py-5 bg-[#F2F2F2] border-0 rounded-2xl w-80 focus:border-black font-poppins" />
+            <input type="date" name='dob' onChange={handleChange} placeholder="Date of Birth dd/mm/yy" class="pl-6 pr-4 py-5 bg-[#F2F2F2] border-0 rounded-2xl w-80 focus:border-black font-poppins" />
           </div>
           <div class="relative flex space-x-20">
-            <input type="password" placeholder="Password" class="pl-6 pr-4 py-5 bg-[#F2F2F2] border-0 rounded-2xl w-80 focus:border-black font-poppins" />
-            <input type="password" placeholder="Confirm Password" class="pl-6 pr-4 py-5 bg-[#F2F2F2] border-0 rounded-2xl w-80 focus:border-black font-poppins" />
+            <input type="password" name='password' onChange={handleChange} placeholder="Password" class="pl-6 pr-4 py-5 bg-[#F2F2F2] border-0 rounded-2xl w-80 focus:border-black font-poppins" />
+            <input type="password" name='confirmPassword' onChange={handleChange} placeholder="Confirm Password" class="pl-6 pr-4 py-5 bg-[#F2F2F2] border-0 rounded-2xl w-80 focus:border-black font-poppins" />
           </div>
         </div>  
 
         <h2 className='font-poppins font-semibold my-5'>Already have an account? <Link href='./login' className='text-blue-600 transform transition-transform duration-200 hover:underline hover:font-bold '>Sign in</Link></h2>
-        <button className='p-5 w-120 bg-[#1C1C1C] text-white font-poppins rounded-2xl hover:scale-105 shadow-sm hover:shadow-md transition duration-300 ease-in-out text-lg font-semibold'>Register</button>
+        <button onClick={handleSubmit} className='p-5 w-120 bg-[#1C1C1C] text-white font-poppins rounded-2xl hover:scale-105 shadow-sm hover:shadow-md transition duration-300 ease-in-out text-lg font-semibold'>Register</button>
         <div className="flex items-center space-x-2 my-5">
           <div className="flex-1 border-t border-gray-400"></div>
           <span className="px-4 text-xl font-poppins"><span className="font-bold">Login</span> with Others</span>

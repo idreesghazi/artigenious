@@ -1,12 +1,14 @@
 import connectMongoDB from "@/app/lib/mongodb";
 import Persona from "@/app/models/persona";
 import { NextResponse } from "next/server";
+import bcrypt from 'bcrypt';
 
 export async function POST(request){
     const { firstName, lastName, email, password, dob, premiumUser } = await request.json();
     await connectMongoDB();
-    await Persona.create({ firstName, lastName, email, password, dob, premiumUser });
-    return NextResponse.json({ message: "Persona created successfully" }, {status:201});
+    const hashedPassword = await bcrypt.hash(password, 10);
+    await Persona.create({ firstName, lastName, email, password: hashedPassword, dob, premiumUser });
+    return NextResponse.json({ message: "Persona created successfully", success: true, }, {status:201});
 }
 
 export async function GET(){
