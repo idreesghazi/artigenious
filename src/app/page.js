@@ -114,7 +114,7 @@ export default function Home() {
   };
 
   return (
-    <div className='bg-[#FFFAF3]'>
+    <div className='bg-[#FFFAF3] h-screen'>
       <div className='header flex p-12 w-full justify-between'>
         <div className='flex'>
           <div className='transition-transform duration-100 hover:scale-110'>
@@ -144,7 +144,7 @@ export default function Home() {
             Where your imagination sparks into reality through the power of AI. Dive into the realm of endless possibilities, crafting unique, blockchain-enshrined artworks with just a few clicks. 
           </h2>
           <Link href='./art_generation'>
-            <button className='bg-[#1C1C1C] font-poppins px-14 py-4 transition-transform duration-100 hover:scale-110 hover:text-blue-600 rounded-2xl text-2xl text-white'>
+            <button className='bg-[#1C1C1C] font-poppins mt-20 px-14 py-4 transition-transform duration-100 hover:scale-110 hover:text-blue-600 rounded-2xl text-2xl text-white'>
               Try it Now!
             </button>
           </Link>
