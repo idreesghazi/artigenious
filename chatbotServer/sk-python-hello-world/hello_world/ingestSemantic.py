@@ -22,7 +22,6 @@ from semantic_kernel.connectors.ai.hugging_face import HuggingFaceTextCompletion
 import semantic_kernel.connectors.ai.open_ai as sk_oai
 from semantic_kernel.orchestration.context_variables import ContextVariables
 import openai
-from openai.embeddings_utils import cosine_similarity
 
 app = Flask(__name__)
 CORS(app, resources={r"/chat": {"origins": "http://localhost:5173"}})

@@ -22,8 +22,8 @@ import asyncio
 from semantic_kernel.connectors.ai.hugging_face import HuggingFaceTextCompletion, HuggingFaceTextEmbedding
 import semantic_kernel.connectors.ai.open_ai as sk_oai
 from semantic_kernel.orchestration.context_variables import ContextVariables
+from semantic_kernel.connectors.ai.open_ai import OpenAIChatCompletion, OpenAITextEmbedding, OpenAITextCompletion
 import openai
-from openai.embeddings_utils import cosine_similarity
 import time
 
 app = Flask(__name__)
@@ -66,14 +66,29 @@ async def populate_memory(kernel: sk.Kernel, store_name, model) -> None:
         #     """
         # )
     else:
-        for info in vector_store_info:
-            count += 1
-            # Save the information to the semantic memory
-            await kernel.memory.save_information_async(
-                "aboutMe", id="info"+str(count), text=info
-            )
-            print("Populating for info", count)
-            time.sleep(25)
+        await kernel.memory.save_information_async(
+            "aboutMe", id="info", text="""
+            About Us:
+            Where your imagination sparks into reality through the power of AI. Dive into the realm of endless possibilities, crafting unique, blockchain-enshrined artworks with just a few clicks. 
+            Artigenious is a platform that allows you to create unique NFTs using the power of AI.
+            How it works:
+            Step 1
+            Start by entering a creative prompt that describes the NFT you want to generate. This could be anything from an abstract concept to 
+            a detailed description of an image.
+            Step 2
+            After entering your prompt, customize various layers to add uniqueness to your NFT. This could include adjusting colors, patterns, or adding specific elements.
+            Step 3
+            Once you're satisfied with the customization, click 'Generate' to create your NFT collection. Each piece will be unique and based on the specifications of your prompt and customizations.
+            """
+        )
+        # for info in vector_store_info:
+        #     count += 1
+        #     # Save the information to the semantic memory
+        #     await kernel.memory.save_information_async(
+        #         "aboutMe", id="info"+str(count), text=info
+        #     )
+        #     print("Populating for info", count)
+        #     time.sleep(25)
 
 
 async def search_memory_examples(kernel: sk.Kernel, query) -> None:
@@ -85,6 +100,7 @@ async def setup_chat_with_memory(
     kernel: sk.Kernel,
 ) -> Tuple[sk.SKFunctionBase, sk.SKContext]:
     sk_prompt = """
+    You are a friendly user chatbot. You are having a conversation with a user. The user is asking you questions about me. You are answering the user's questions. You are trying to be as helpful as possible. You are trying to be as friendly as possible. You are trying to be as polite as possible. You are trying to be as informative as possible. You are trying to be as accurate as possible. You are trying to be as helpful as possible. You are trying to be as friendly as possible. You are trying to be as polite as possible. You are trying to be as informative as possible. You are trying to be as accurate as possible. You are trying to be as helpful as possible. You are trying to be as friendly as possible. You are trying to be as polite as possible. You are trying to be as informative as possible. You are trying to be as accurate as possible. You are trying to be as helpful as possible. You are trying to be as friendly as possible. You are trying to be as polite as possible. You are trying to be as informative as possible. You are trying to be as accurate as possible.
     Chatbot should only answer from the given facts only.
     It should say 'I apologize, but it appears that the information you're requesting is beyond my current knowledge.
                  As an AI language model, my training only goes up to given data, and I am not aware of any events or developments that occurred outside it. Is there anything else I can assist you with that falls within my knowledge range?' if
@@ -205,16 +221,13 @@ async def setKernel(query, model, store_name) -> None:
     elif model == "OpenAI":
         kernel = sk.Kernel()
         print("Setting up OpenAI API key...")
-        kernel.add_text_completion_service(
-            "dv", sk_oai.OpenAITextCompletion(
-                "text-davinci-003", api_key, org_id)
-        )
-        kernel.add_text_embedding_generation_service(
-            "ada", sk_oai.OpenAITextEmbedding(
-                "text-embedding-ada-002", api_key, org_id)
-        )
+        kernel.add_chat_service("chat-gpt", OpenAIChatCompletion("gpt-3.5-turbo", api_key, org_id))
+        print("Setting up OpenAI text completion...")
+        kernel.add_text_embedding_generation_service("ada", OpenAITextEmbedding("text-embedding-ada-002", api_key, org_id))
+        print("adding memory store...")
         kernel.register_memory_store(
             memory_store=sk.memory.VolatileMemoryStore())
+        print("importing skill...")
         kernel.import_skill(sk.core_skills.TextMemorySkill())
 
         print("Populating memory...")
@@ -230,7 +243,7 @@ async def setKernel(query, model, store_name) -> None:
         return await chat(kernel, chat_func, context, model, query)
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
+CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 
 
 @app.route('/chats', methods=['POST'])
