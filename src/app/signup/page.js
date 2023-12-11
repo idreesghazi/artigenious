@@ -23,7 +23,7 @@ export default function Login() {
         <h1 className='font-smooch font-bold text-9xl'>
             Create Account
         </h1>
-        <h2 className='font-poppins text-xl mb-2'>We are glad to have you!</h2>
+        <h2 className='font-poppins text-xl'>We are glad to have you!</h2>
         <div class="flex flex-col space-y-5">
           <div class="relative flex space-x-20">
             <input type="text" placeholder="First Name" class="pl-6 pr-4 py-5 bg-[#F2F2F2] border-0 rounded-2xl w-80 focus:border-black font-poppins" />
