@@ -23,6 +23,7 @@ import artboard4 from '../images/artboard4.png'
 import coinPng from '../images/coinPng.png'
 
 export default function art_generation() {
+    const router = useRouter();
     const imageCards = [
         { src: artboard1, alt: 'Generated NFT 1' },
         { src: artboard2, alt: 'Generated NFT 2' },
@@ -44,7 +45,11 @@ export default function art_generation() {
                     <div className="flex items-center space-x-2 bg-white px-5 py-2 rounded-xl mx-10 my-8 shadow-md">
                         <span className="text-xl font-bold">260</span>
                         <Image src={coinPng} alt="Coin" width={20} height={20} />
-                        <button className="bg-[#FF8C32] text-white py-1 px-3 rounded-xl ml-5 hover:scale-105 transition-transform duration-300">Upgrade</button>
+                        
+                        <button onClick={()=>router.push('./payment')} className="bg-[#FF8C32] text-white py-1 px-3 rounded-xl ml-5 hover:scale-105 transition-transform duration-300">
+                             Upgrade
+                        </button>
+                       
                     </div>
                     {/* Image Dimension */}
                     <div className='border-t-2 border-[#D15C00] py-8 border-opacity-30'>
