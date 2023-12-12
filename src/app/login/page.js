@@ -1,4 +1,5 @@
 "use client";
+import Cookie from 'js-cookie';
 import Image from 'next/image'
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -35,6 +36,7 @@ export default function Login() {
     const data = await res.json();
     
     if (data.success) {
+      Cookie.set('userEmail', email, { expires: 1 });
       toast.success('Login successful! Redirecting...');
       setTimeout(() => {
         router.push('/'); // Replace '/' with your home page route
