@@ -24,6 +24,10 @@ import coinPng from '../images/coinPng.png'
 
 export default function art_generation() {
     const router = useRouter();
+    const [showImages, setShowImages] = useState(false);
+    const [prompt, setPrompt] = useState('');
+    const [generatedImage, setGeneratedImage] = useState('');
+
     const imageCards = [
         { src: artboard1, alt: 'Generated NFT 1' },
         { src: artboard2, alt: 'Generated NFT 2' },
@@ -31,12 +35,51 @@ export default function art_generation() {
         { src: artboard4, alt: 'Generated NFT 2' },
         // Add more image objects as needed
     ];
+
+    
+    
+    const handleGenerateClick = async () => {
+        if (!prompt) {
+            toast.error("Please enter a prompt.");
+            return;
+        }
+    
+        try {
+            const response = await fetch('http://127.0.0.1:5000/generate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ prompt }),
+            });
+    
+            if (!response.ok) {
+                throw new Error('Failed to generate image');
+            }
+    
+            const data = await response.json();
+    
+            if (data.success) {
+                // Convert encoded image data to blob and create a URL for it
+                const blob = new Blob([Buffer.from(data.image, 'latin1')], {type: 'image/png'});
+                const url = URL.createObjectURL(blob);
+                setGeneratedImage(url); // Update state with URL to display the image
+                setShowImages(true);
+            } else {
+                toast.error("Error: " + data.error);
+            }
+        } catch (error) {
+            toast.error("Request failed: " + error.message);
+        }
+    };
+    
+    
+
     return (
         <div className="mx-auto px-5 py-5 bg-[#FFFAF3] font-poppins">
-            <div className="flex justify-between">
-                
+            <div className="flex space-x-10">               
                 {/* Left section */}
-                <div className="">
+                <div className="w-96">
                     <div className=' mx-4 flex px-2 gap-2 items-center'>
                         <Image src={orangeLogo} alt="Orange Logo" width={50} height={50} />
                         <span className="text-xl font-semibold">ArtiGenious</span>
@@ -140,13 +183,17 @@ export default function art_generation() {
                 </div>
                 
                 {/* Right section */}
-                <div className="space-y-4">
+                <div className="space-y-4 w-full">
                     {/* Generate NFTs Header */}
                     <h2 className="text-3xl font-semibold text-[#131313]">Generate NFTs</h2>
                     {/* Text input for NFT description */}
                     <div className='flex space-x-10'>
-                        <input type="text" placeholder="Describe the art you want to envision" className="w-full px-4 py-3 rounded-xl border border-gray-200" />
-                        <button className='flex bg-[#131313] text-white items-center px-4 py-3 rounded-xl justify-between space-x-3 font-semibold'>
+                        <input 
+                            value={prompt}
+                            onChange={(e) => setPrompt(e.target.value)}
+                            type="text" placeholder="Describe the art you want to envision" className="w-full px-4 py-3 rounded-xl border border-gray-200"
+                        />
+                        <button onClick={handleGenerateClick} className='flex bg-[#131313] text-white items-center px-4 py-3 rounded-xl justify-between space-x-3 font-semibold'>
                             <div>
                                 Generate
                             </div>
@@ -159,16 +206,25 @@ export default function art_generation() {
                         </button>
                     </div>
                     {/* Generation History */}
-                    <div>
-                    <h3 className="text-lg font-semibold mb-2">Generation History</h3>
-                    <div className="grid grid-cols-3 gap-4">
-                        {imageCards.map((card, index) => (
-                        <div key={index} className="rounded-lg overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105">
-                            <Image src={card.src} alt={card.alt} className='rounded-lg ' width={300} height={300} layout="responsive" />
+                    {generatedImage!='' && ( // Conditional rendering based on showImages state
+                    
+                        <div>
+                             <div>
+                                <h3 className="text-lg font-semibold mb-2">Generated Image</h3>
+                                <div className="w-80 rounded-lg overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105">
+                                    <Image src={generatedImage} alt="Generated Art" className='rounded-lg ' width={100} height={100} layout="responsive" />
+                                </div>
+                            </div>
+                            {/* <h3 className="text-lg font-semibold mb-2">Generation History</h3>
+                            <div className="grid grid-cols-3 gap-4">
+                            {imageCards.map((card, index) => (
+                                <div key={index} className="rounded-lg overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105">
+                                <Image src={card.src} alt={card.alt} className='rounded-lg ' width={300} height={300} layout="responsive" />
+                                </div>
+                            ))}
+                            </div> */}
                         </div>
-                        ))}
-                    </div>
-                    </div>
+                        )}
                     {/* Prompt Generation */}
                     <div>
                     <h3 className="text-lg font-semibold mb-2">Prompt Generation</h3>

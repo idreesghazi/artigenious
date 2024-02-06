@@ -3,10 +3,10 @@ import Stripe from 'stripe';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: '2020-08-27',
+  apiVersion: "2023-10-16",
 });
 
-export default async function handler(req, res) {
+export async function POST(req, res) {
   if (req.method === 'POST') {
     const {
       cardHolderName,
@@ -79,11 +79,20 @@ export default async function handler(req, res) {
 
       res.status(200).json({ session });
     } catch (err) {
-      console.error(err);
-      res.status(500).json({ statusCode: 500, message: err.message });
+      console.error(error);
+
+      // Return a response with the appropriate error status code and message
+      return res.status(500).json({ error: error.message });
     }
   } else {
     res.setHeader('Allow', 'POST');
-    res.status(405).end('Method Not Allowed');
+    return res.status(405).end('Method Not Allowed');
   }
 }
+
+export const config = {
+  api: {
+    externalResolver: true,
+  },
+};
+
