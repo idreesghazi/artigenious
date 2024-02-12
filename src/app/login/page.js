@@ -1,4 +1,5 @@
 "use client";
+import { GoogleLogin } from 'react-google-login';
 import Cookie from 'js-cookie';
 import Image from 'next/image'
 import { useRouter } from 'next/navigation';
@@ -17,12 +18,21 @@ import passwordIcon from '../images/Vector.png'
 import googleIcon from '../images/google.png'
 import facebookIcon from '../images/facebook.png'
 import design from '../images/design.png'
+
+const clientID = "414772544793-nnohtr23e2ov617uq88je04idt0mq7c9.apps.googleusercontent.com";
+
 export default function Login() {
-  
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
 
+  const onSuccess = (res) => {
+    console.log("Login Success with User ", res.profileObj);
+  }
+  const onFailure = (res) => {
+    console.log("Login Failed ", res);
+  }
   const handleLogin = async (e) => {
     e.preventDefault();
     // Call your API endpoint for login
@@ -34,7 +44,7 @@ export default function Login() {
       body: JSON.stringify({ email, password }),
     });
     const data = await res.json();
-    
+
     if (data.success) {
       Cookie.set('userEmail', email, { expires: 1 });
       toast.success('Login successful! Redirecting...');
@@ -54,7 +64,7 @@ export default function Login() {
           <Image src={design} className='w-16' />
         </div>
         <h1 className='font-smooch font-bold text-9xl text-[#1C1C1C]'>
-            Welcome 
+          Welcome
         </h1>
         <h2 className='font-poppins text-xl text-[#1C1C1C]'>We are glad to see you back with us</h2>
         <div class="flex flex-col space-y-5 pt-8">
@@ -66,7 +76,7 @@ export default function Login() {
             <Image src={passwordIcon} class="absolute left-0 top-1/2 transform -translate-y-1/2 ml-3" alt="Password Icon" />
             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" class="pl-12 pr-4 py-5 bg-[#F2F2F2] border-0 rounded-2xl w-120 focus:border-black font-poppins" />
           </div>
-        </div>  
+        </div>
 
         <h2 className='font-poppins font-semibold my-5'>Don't have an account? <Link href='./signup' className='text-blue-600 transform transition-transform duration-200 hover:underline hover:font-bold '>Sign up</Link></h2>
         <button onClick={handleLogin} className='p-5 w-120 bg-[#1C1C1C] text-white font-poppins rounded-2xl hover:scale-105 shadow-sm hover:shadow-md transition duration-300 ease-in-out text-lg font-semibold'>Next</button>
@@ -76,12 +86,22 @@ export default function Login() {
           <div className="flex-1 border-t border-gray-400"></div>
         </div>
         <div className='flex flex-col items-center space-y-4 font-poppins'>
+          <GoogleLogin
+            clientID={clientID}
+            buttonText="Login with Google"
+            onSuccess={onSuccess}
+            onFailure={onFailure}
+            cookiePolicy={'single_host_origin'}
+            isSignedIn={true}
+            disabled={false}
+          />
           <button className='group w-120 flex items-center justify-center space-x-2 p-5 border-2 border-black rounded-2xl shadow-sm hover:shadow-md transition duration-300 ease-in-out'>
             <Image src={googleIcon} className='w-5 h-5 mx-1' />
-            <span className='transition-transform duration-300 group-hover:scale-110'>Login with Google</span>
+
+            <span className='transition-transform duration-300 group-hover:scale-110'> </span>
           </button>
           <button className='group w-120 flex items-center justify-center space-x-2 p-5 border-2 border-black rounded-2xl shadow-sm hover:shadow-md transition duration-300 ease-in-out'>
-          <Image src={facebookIcon} className='w-5 h-5 mx-1' />
+            <Image src={facebookIcon} className='w-5 h-5 mx-1' />
             <span className='transition-transform duration-300 group-hover:scale-110'>Login with Facebook</span>
           </button>
         </div>
