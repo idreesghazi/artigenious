@@ -1,6 +1,5 @@
 "use client";
-import { useEffect } from 'react';
-import {gapi} from 'gapi-script';
+
 import Image from 'next/image'
 import { useState } from 'react'
 import Link from 'next/link'
@@ -17,18 +16,9 @@ import downIcon from './images/sendIcon.png'
 import logo from './images/logo.jpg'
 import ReactLoading from 'react-loading'; // Import the loading component
 import ConfigureData from './Component/ConfigureData'
-const clientID = "414772544793-nnohtr23e2ov617uq88je04idt0mq7c9.apps.googleusercontent.com";
-export default function Home() {
-  useEffect( ()=>{
-    function start(){
-      gapi.client.init({
-        clientId:clientID,
-        scope:""
-      })
 
-    };
-    gapi.load('client:auth2', start)
-  })
+export default function Home() {
+  
   const [isChatboxOpen, setIsChatboxOpen] = useState(false);
   const [chatMessages, setChatMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false); // New state for loading
