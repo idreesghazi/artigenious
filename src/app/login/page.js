@@ -3,9 +3,9 @@ import { GoogleLogin } from "react-google-login";
 import Cookie from "js-cookie";
 import Image from "next/image";
 import Script from "next/script";
+import { signIn, useSession } from "next-auth/react";
 
 import { useEffect } from "react";
-import { gapi } from "gapi-script";
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -24,58 +24,16 @@ import googleIcon from "../images/google.png";
 import facebookIcon from "../images/facebook.png";
 import design from "../images/design.png";
 
-const clientID =
-  "414772544793-nnohtr23e2ov617uq88je04idt0mq7c9.apps.googleusercontent.com";
-
 export default function Login() {
+  const session = useSession();
+  console.log("your session is : ",session);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
 
-  const handleGoogle = async (response) => {
-    try {
-      const result = await auth.handleGoogle({
-        credential: response.credential,
-        endpoint: "/auth/handler",
-      });
-      if (result) {
-        toast.success("Login successful! Redirecting...");
-        router.push("/");
-      } else {
-        alert("Login failed");
-      }
-    } catch (err) {
-      alert(`Error: ${err.message}`);
-    }
-  };
-
-  useEffect(() => {
-    // We check every 300ms to see if google client is loaded
-    const interval = setInterval(() => {
-      if (window.google) {
-        clearInterval(interval);
-        google.accounts.id.initialize({
-          client_id: clientID, // Your client ID from Google Cloud
-          callback: handleGoogle, // Handler to process login token
-        });
-
-        // Render the Google button
-        google.accounts.id.renderButton(
-          document.getElementById("google-login-btn"),
-          {
-            type: "icon",
-            theme: "filled_blue",
-            size: "large",
-            text: "continue_with",
-            shape: "circle",
-            width: "200",
-          }
-        );
-
-        google.accounts.id.prompt();
-      }
-    }, 300);
-  }, []);
+  if (session.status === "authenticated") {
+    router.push("/");
+  }
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -102,7 +60,6 @@ export default function Login() {
 
   return (
     <>
-      <Script src="https://accounts.google.com/gsi/client" async defer></Script>
       <div className="bg-[#FFFFFF] w-full flex justify-center items-center px-20 py-10 space-x-40">
         <ToastContainer />
         <div className="text-center">
@@ -170,10 +127,10 @@ export default function Login() {
           </div>
           <div className="flex flex-col items-center space-y-4 font-poppins">
             <button
-              id=""
+              onClick={() => signIn("google")}
               className="group w-120 flex items-center justify-center space-x-2 p-5 border-2 border-black rounded-2xl shadow-sm hover:shadow-md transition duration-300 ease-in-out"
             >
-              <div id="google-login-btn"></div>
+              <Image src={googleIcon} className="w-5 h-5 mx-1" />
               <span className="transition-transform duration-300 group-hover:scale-110">
                 Login with Google{" "}
               </span>
