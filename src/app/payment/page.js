@@ -23,6 +23,7 @@ import visaLogo from '../images/visaLogo.png'
 import mastercardLogo from '../images/mastercardLogo.png'
 import easypaisaLogo from '../images/easypaisaLogo.png'
 import jazzcashLogo from '../images/jazzCashLogo.png'
+import { checkout } from '@/checkout';
 
 export default function payment() {
 
