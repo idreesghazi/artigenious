@@ -90,7 +90,10 @@ export default function art_generation() {
                         <span className="text-xl font-bold">260</span>
                         <Image src={coinPng} alt="Coin" width={20} height={20} />
 
-                        <button onClick={(() => {
+                        <button onClick={()=>router.push('./payment')} className="bg-[#FF8C32] text-white py-1 px-3 rounded-xl ml-5 hover:scale-105 transition-transform duration-300">
+                             Upgrade
+                        </button>
+                        {/* <button onClick={(() => {
                             checkout(
                                 {
                                     lineItems: [{ price: "price_1OjKxkClJNcB9xu1Tsh1wi6b", quantity: 1 }]
@@ -98,7 +101,7 @@ export default function art_generation() {
                             )
                         })} className="bg-[#FF8C32] text-white py-1 px-3 rounded-xl ml-5 hover:scale-105 transition-transform duration-300">
                             Upgrade
-                        </button>
+                        </button> */}
 
                     </div>
                     {/* Image Dimension */}
