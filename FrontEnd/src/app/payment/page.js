@@ -24,7 +24,7 @@ import visaLogo from "../images/visaLogo.png";
 import mastercardLogo from "../images/mastercardLogo.png";
 import easypaisaLogo from "../images/easypaisaLogo.png";
 import jazzcashLogo from "../images/jazzCashLogo.png";
-import { checkout } from "@/checkout";
+import { checkout } from '@/checkout';
 
 export default function payment() {
   const { status } = useSession();
@@ -122,7 +122,7 @@ export default function payment() {
       </div>
       <div className="flex justify-center items-center">
         <div className="w-full mx-auto px-8 py-4 flex justify-center space-x-28">
-          <div className="bg-white border border-[#000000] border-opacity-30 shadow-2xl rounded-lg p-4 flex flex-col lg:flex-row">
+          {/* <div className="bg-white border border-[#000000] border-opacity-30 shadow-2xl rounded-lg p-4 flex flex-col lg:flex-row">
             <div className="lg:w-160">
               <h2 className="text-2xl font-bold mb-6 font-poppins">
                 Payment Details
@@ -135,7 +135,7 @@ export default function payment() {
                 <div className="flex-1 border-t border-gray-400"></div>
               </div>
               <div className="mb-4 space-x-5 flex justify-center">
-                {/* Payment Method Selection */}
+                 
 
                 <button className="w-40 px-10 py-2 justify-center rounded-full border-2 border-gray-300 hover:scale-105 transition-transform duration-300">
                   <Image src={paypalLogo} alt="Logo" className=" w-20" />
@@ -148,7 +148,7 @@ export default function payment() {
                 </button>
               </div>
               <div className="mb-4 space-x-5 flex justify-center">
-                {/* Payment Method Selection */}
+                
                 <button className="w-40 px-6 py-2 justify-center rounded-full border-2 border-gray-300 hover:scale-105 transition-transform duration-300">
                   <Image src={easypaisaLogo} alt="Logo" className="w-40" />
                 </button>
@@ -164,7 +164,7 @@ export default function payment() {
                 <div className="flex-1 border-t border-gray-400"></div>
               </div>
               <div className="mb-4">
-                {/* Add Details Form */}
+                
                 <form>
                   <div className="space-x-6 mb-4">
                     <input
@@ -252,7 +252,6 @@ export default function payment() {
                       class="text-sm p-3 bg-[#F2F2F2] border-0 rounded-2xl w-72 focus:border-black font-poppins"
                     />
                   </div>
-                  {/* ... more input fields */}
                   <div className="flex space-x-2 p-2">
                     <input
                       type="radio"
@@ -266,8 +265,8 @@ export default function payment() {
                 </form>
               </div>
             </div>
-          </div>
-          <div className="lg:w-1/3 p-4 gradient-background rounded-lg lg:ml-4 font-poppins my-auto py-28 px-8">
+          </div> */}
+          <div className="lg:w-130 p-4 gradient-background rounded-lg lg:ml-4 font-poppins mt-44 py-28 px-8">
             <h3 className="text-2xl font-semibold mb-2 text-black">
               Artigenious Premium
             </h3>
@@ -292,7 +291,8 @@ export default function payment() {
               </div>
             </div>
             <button
-              onClick={handleCheckout}
+            onClick={(()=>checkout({lineItems: [{price: 'price_1Os5CcIq4eA6e3CWY31RAzP9', quantity: 1}], successUrl: 'http://localhost:3000/success', cancelUrl: 'http://localhost:3000/cancel'}) )}                     
+              // onClick={handleCheckout}
               className="bg-black text-white py-4 font-semibold px-6 rounded-2xl mt-4 w-full hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-opacity-50 transition-all"
             >
               Subscribe
