@@ -23,11 +23,34 @@ import artboard4 from "../images/artboard4.png";
 import coinPng from "../images/coinPng.png";
 import { checkout } from "@/checkout";
 
+import { storage } from "../lib/firebase";
+import { ref, listAll, getDownloadURL } from "firebase/storage";
+
 export default function art_generation() {
   const router = useRouter();
   const [showImages, setShowImages] = useState(false);
   const [prompt, setPrompt] = useState("");
   const [generatedImage, setGeneratedImage] = useState("");
+  const [images, setImages] = useState([]);
+  const [fileUrls, setFileUrls] = useState([]);
+
+  const listFiles = async (directory) => {
+    const listRef = ref(storage, directory);
+
+    try {
+      const res = await listAll(listRef);
+      const urls = await Promise.all(
+        res.items.map(async (itemRef) => {
+          const url = await getDownloadURL(itemRef);
+          return url;
+        })
+      );
+      setFileUrls(urls);
+    } catch (error) {
+      // Uh-oh, an error occurred!
+      console.error("Error listing files:", error);
+    }
+  };
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -48,36 +71,60 @@ export default function art_generation() {
       toast.error("Please enter a prompt.");
       return;
     }
-
-    try {
-      const response = await fetch("http://127.0.0.1:5000/generate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ prompt }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to generate image");
-      }
-
-      const data = await response.json();
-
-      if (data.success) {
-        // Convert encoded image data to blob and create a URL for it
-        const blob = new Blob([Buffer.from(data.image, "latin1")], {
-          type: "image/png",
+    const chatbotModel = "OpenAI";
+    if (chatbotModel == "OpenAI" || chatbotModel == "Hugging Face") {
+      try {
+        // Send the user's message to the Flask API
+        const response = await fetch("http://127.0.0.1:5002/generateScript", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ query: prompt, model: chatbotModel }),
         });
-        const url = URL.createObjectURL(blob);
-        setGeneratedImage(url); // Update state with URL to display the image
-        setShowImages(true);
-      } else {
-        toast.error("Error: " + data.error);
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch the chatbot response.");
+        }
+
+        // Get the chatbot's response from the API
+        const data = await response.json();
+        const generateResponse = data.answer;
+        console.log(generateResponse);
+        // Add the chatbot's response to the chat messages
+      } catch (error) {
+        console.error(error);
       }
-    } catch (error) {
-      toast.error("Request failed: " + error.message);
-    }
+    } 
+    // try {
+    //   const response = await fetch("http://127.0.0.1:5000/generate", {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({ prompt }),
+    //   });
+
+    //   if (!response.ok) {
+    //     throw new Error("Failed to generate image");
+    //   }
+
+    //   const data = await response.json();
+
+    //   if (data.success) {
+    //     // Convert encoded image data to blob and create a URL for it
+    //     const blob = new Blob([Buffer.from(data.image, "latin1")], {
+    //       type: "image/png",
+    //     });
+    //     const url = URL.createObjectURL(blob);
+    //     setGeneratedImage(url); // Update state with URL to display the image
+    //     setShowImages(true);
+    //   } else {
+    //     toast.error("Error: " + data.error);
+    //   }
+    // } catch (error) {
+    //   toast.error("Request failed: " + error.message);
+    // }
   };
 
   const renderButtons = () => {
@@ -89,7 +136,7 @@ export default function art_generation() {
         <button
           key={i}
           onClick={toggleModal}
-          className="w-64 text-left bg-white text-gray-500 border border-gray-300 items-center px-4 py-3 rounded-xl justify-between font-semibold hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0 transition-transform duration-300"
+          className="w-auto text-left bg-white text-gray-500 border border-gray-300 items-center px-4 py-3 rounded-xl justify-between font-semibold hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0 transition-transform duration-300"
         >
           <div>{`${i}%`}</div>
           <div>{`Blocky Green`}</div>
@@ -357,7 +404,7 @@ export default function art_generation() {
                                 Types
                               </h1>
                               <div className="">
-                                <div className="flex space-x-3 max-w-4xl overflow-y-auto">
+                                <div className="custom-scrollbar py-4 flex space-x-3 max-w-4xl overflow-x-auto mb-10">
                                   {renderButtons()}
                                 </div>
                                 <div className="flex space-y-2 justify-between">
@@ -365,35 +412,50 @@ export default function art_generation() {
                                     <h1 className="text-lg font-semibold mb-2">
                                       Layers
                                     </h1>
-                                    <button className="text-left text-gray-500 border border-gray-300 items-center px-4 py-3 rounded-xl justify-between font-semibold hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0 transition-transform duration-300">
-                                      Forehead
+                                    <button
+                                      onClick={() => listFiles("Dress")}
+                                      className="text-left text-gray-500 border border-gray-300 items-center px-4 py-3 rounded-xl justify-between font-semibold hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0 transition-transform duration-300"
+                                    >
+                                      Dress
                                     </button>
-                                    <button className="text-left text-gray-500 border border-gray-300 items-center px-4 py-3 rounded-xl justify-between font-semibold hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0 transition-transform duration-300">
-                                      Eyes
+                                    <button
+                                      onClick={() => listFiles("Face")}
+                                      className="text-left text-gray-500 border border-gray-300 items-center px-4 py-3 rounded-xl justify-between font-semibold hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0 transition-transform duration-300"
+                                    >
+                                      Face
                                     </button>
-                                    <button className="text-left text-gray-500 border border-gray-300 items-center px-4 py-3 rounded-xl justify-between font-semibold hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0 transition-transform duration-300">
+                                    <button
+                                      onClick={() => listFiles("Background")}
+                                      className="text-left text-gray-500 border border-gray-300 items-center px-4 py-3 rounded-xl justify-between font-semibold hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0 transition-transform duration-300"
+                                    >
+                                      Hand
+                                    </button>
+                                    <button
+                                      onClick={() => listFiles("Head")}
+                                      className="text-left text-gray-500 border border-gray-300 items-center px-4 py-3 rounded-xl justify-between font-semibold hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0 transition-transform duration-300"
+                                    >
+                                      Head
+                                    </button>
+                                    <button
+                                      onClick={() => listFiles("Mouth")}
+                                      className="text-left text-gray-500 border border-gray-300 items-center px-4 py-3 rounded-xl justify-between font-semibold hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0 transition-transform duration-300"
+                                    >
                                       Mouth
-                                    </button>
-                                    <button className="text-left text-gray-500 border border-gray-300 items-center px-4 py-3 rounded-xl justify-between font-semibold hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0 transition-transform duration-300">
-                                      Body
-                                    </button>
-                                    <button className="text-left text-gray-500 border border-gray-300 items-center px-4 py-3 rounded-xl justify-between font-semibold hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0 transition-transform duration-300">
-                                      Oufits
                                     </button>
                                   </div>
                                   <div className="flex flex-col space-y-2">
                                     <h1 className="text-lg font-semibold mb-2">
                                       States
                                     </h1>
-                                    <div className="grid grid-cols-3 gap-6 w-96">
-                                      {imageCards.map((card, index) => (
+                                    <div className="custom-scrollbar p-3 grid grid-cols-3 grid-row-3 max-h-96 overflow-y-auto gap-6 w-96">
+                                      {fileUrls.map((url, index) => (
                                         <div
                                           key={index}
-                                          className="rounded-lg overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105"
+                                          className="border border-gray-300 rounded-lg overflow-hidden transition-transform duration-300 hover:scale-105"
                                         >
                                           <Image
-                                            src={card.src}
-                                            alt={card.alt}
+                                            src={url}
+                                            alt={"image"}
                                             className="rounded-lg "
                                             width={5}
                                             height={5}
@@ -409,15 +471,15 @@ export default function art_generation() {
                             <div className=" -mt-16 ml-10">
                               <div className="lg:w-96 lg:h-[22rem] flex flex-col items-center bg-white shadow-lg rounded-xl">
                                 <Image
-                                    src={artboard1}
-                                    alt="Preview Image"
-                                    className="rounded-t-lg overflow-auto"
-                                    width={300}
-                                    height={300}
-                                    layout="responsive"
+                                  src={artboard1}
+                                  alt="Preview Image"
+                                  className="rounded-t-lg overflow-auto"
+                                  width={300}
+                                  height={300}
+                                  layout="responsive"
                                 />
                                 <button className="mt-5 bg-[#131313] text-white text-lg w-40 text-center px-4 py-2 rounded-xl hover:scale-110 transition-transform duration-300">
-                                    Randomize
+                                  Randomize
                                 </button>
                               </div>
                             </div>

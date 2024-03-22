@@ -79,6 +79,13 @@ async def populate_memory(kernel: sk.Kernel, store_name, model) -> None:
             After entering your prompt, customize various layers to add uniqueness to your NFT. This could include adjusting colors, patterns, or adding specific elements.
             Step 3
             Once you're satisfied with the customization, click 'Generate' to create your NFT collection. Each piece will be unique and based on the specifications of your prompt and customizations.
+            
+            Our Team:
+            Idrees Ahmed Ghazi is the developer of this platform. He is a Computer Scientist with a passion for AI and blockchain technology. He has worked on various projects in the field of AI and blockchain and has a deep understanding of the technology.
+            His contributions to the project are the implementation of the AI model that generates the NFTs.
+            Anfaal Afrose is the designer of this platform. He is a Graphic Designer with a passion for creating unique and visually appealing designs. He has worked on various projects in the field of graphic design and has a deep understanding of design principles.
+            Our Supervisors:
+            Sir Khurran Iqbal is the supervisor of this project. He is a lecturer at the Comsats University and teaches various subjects related to ICT. He has guided us throughout the development of this platform and provided valuable insights.
             """
         )
         # for info in vector_store_info:
@@ -246,6 +253,73 @@ app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 
 
+
+async def generate(
+    kernel: sk.Kernel, chat_func: sk.SKFunctionBase, context: sk.SKContext, model, query
+) -> None:
+
+    context["user_input"] = query
+
+    if query != "":
+        answer = await kernel.run_async(chat_func, input_vars=context.variables)
+        context["chat_history"] += f"\nUser:> {query}\nAnswer:> {answer}\n"
+        print("Answer", answer)
+        return answer  # Return the chat response as a JSON object
+
+
+
+async def setup_generate_script(
+    kernel: sk.Kernel,
+) -> Tuple[sk.SKFunctionBase, sk.SKContext]:
+    sk_prompt = """
+    You are a json script generation. You get input from user. The user asks you to generate json for multiple queries which will be used to generate traits of nfts.
+    You are trying to be as vast as possible.
+    Must: Generate a json like [{"trait_type": "Background", "value": "Generate a celebration background"}, {"trait_type": "Eyes", "value": "Generate a black sunlight glasses"},...].
+    Generate the script for multiple traits like Background, Eyes, Glasses, Dress etc.
+    Generate json scripts for atleast 10 different values for each trait_type, and generate them on your own randomly. Like generating for background, 10 times and similarly for different trait types.
+    The value should be a script for the my stable diffusion model.
+    Chat:
+    {{$chat_history}}
+    User: {{$user_input}}
+    ChatBot:""".strip()
+
+    chat_func = kernel.create_semantic_function(
+        sk_prompt, max_tokens=600, temperature=0.8
+    )
+    context = kernel.create_new_context()
+    # context[sk.core_skills.TextMemorySkill.COLLECTION_PARAM] = "aboutMe"
+    # context[sk.core_skills.TextMemorySkill.RELEVANCE_PARAM] = 1
+
+    context["chat_history"] = ""
+
+    return chat_func, context
+
+async def setKernelToGenerate(query, model, store_name):
+    api_key, org_id = sk.openai_settings_from_dot_env()
+    if model == "OpenAI":
+        kernel = sk.Kernel()
+        print("Setting up OpenAI API key...")
+        kernel.add_chat_service("chat-gpt", OpenAIChatCompletion("gpt-3.5-turbo", api_key, org_id))
+        print("Setting up OpenAI text completion...")
+        kernel.add_text_embedding_generation_service("ada", OpenAITextEmbedding("text-embedding-ada-002", api_key, org_id))
+        print("adding memory store...")
+        kernel.register_memory_store(
+            memory_store=sk.memory.VolatileMemoryStore())
+        print("importing skill...")
+        kernel.import_skill(sk.core_skills.TextSkill())
+
+        # print("Populating memory...")
+        # await populate_memory(kernel, store_name, model)
+
+        # print("Asking questions... (manually)")
+        # await search_memory_examples(kernel)
+
+        print("Setting up Generate Script")
+        chat_func, context = await setup_generate_script(kernel)
+
+        print("Begin Generating (type 'exit' to exit):\n")
+        return await generate(kernel, chat_func, context, model, query)
+
 @app.route('/chats', methods=['POST'])
 def chats():
     query = request.json.get('query', '').strip()
@@ -257,6 +331,20 @@ def chats():
         'question': query,
         'answer': str(answer),
         'source_documents': []
+    }
+    return jsonify(result)
+
+@app.route('/generateScript', methods=['POST'])
+def generateScript():
+    
+    query = request.json.get('query', '').strip()
+    print("Generating Script with query", query)
+    model = request.json.get('model', '').strip()
+    store_name = "https://carepvtltd.com/#".split("//")[-1].split("/")[0]
+    answer = asyncio.run(setKernelToGenerate(query, model, store_name))
+    result = {
+        'question': query,
+        'answer': str(answer),
     }
     return jsonify(result)
 
