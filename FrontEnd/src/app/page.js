@@ -25,7 +25,8 @@ import ConfigureData from "./Component/ConfigureData";
 import { FaInstagramSquare } from "react-icons/fa";
 import { BsTwitterX } from "react-icons/bs";
 import { FaFacebookF } from "react-icons/fa6";
-import { FaYoutube } from "react-icons/fa"; 
+import { FaYoutube } from "react-icons/fa";
+
 
 export default function Home() {
   const { status } = useSession();
@@ -134,6 +135,16 @@ export default function Home() {
 
   return (
     <>
+      <head>
+        <title>ArtiGenious: Welcome to the future of artistry with ArtiGenious NFTs</title>
+        <link
+          rel="icon"
+          href="/icon?<generated>"
+          type="image/<generated>"
+          sizes="<generated>"
+        />
+      </head>
+      <body>
       <div className="bg-[#FFFAF3] h-screen">
         <div className="header flex p-12 w-full justify-between">
           <div className="flex">
@@ -314,7 +325,7 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <div className="bg-[#1C1C1C] h-screen">
+      <div id="services" className="bg-[#1C1C1C] h-screen">
         <div className="flex flex-col items-center">
           <h1 className="font-smooch font-bold text-white text-6xl p-20">
             How it Works?
@@ -322,7 +333,12 @@ export default function Home() {
         </div>
         <div className="grid grid-cols-3 gap-10 p-20">
           <div className="flex flex-col items-center justify-center border border-white rounded-xl">
-            <Image className="hover:scale-110 transition-transform duration-200" src={step1Img} width={300} height={300} />
+            <Image
+              className="hover:scale-110 transition-transform duration-200"
+              src={step1Img}
+              width={300}
+              height={300}
+            />
             <h1 className="font-smooch font-bold text-white text-4xl p-5">
               Step 1
             </h1>
@@ -333,7 +349,12 @@ export default function Home() {
             </h2>
           </div>
           <div className="flex flex-col items-center justify-center border border-white rounded-xl">
-            <Image className="hover:scale-110 transition-transform duration-200" src={step2Img} width={300} height={300} />
+            <Image
+              className="hover:scale-110 transition-transform duration-200"
+              src={step2Img}
+              width={300}
+              height={300}
+            />
             <h1 className="font-smooch font-bold text-white text-4xl p-5">
               Step 2
             </h1>
@@ -344,7 +365,12 @@ export default function Home() {
             </h2>
           </div>
           <div className="flex flex-col items-center justify-center border border-white rounded-xl">
-            <Image className="hover:scale-110 transition-transform duration-200" src={step3Img} width={300} height={300} />
+            <Image
+              className="hover:scale-110 transition-transform duration-200"
+              src={step3Img}
+              width={300}
+              height={300}
+            />
             <h1 className="font-smooch font-bold text-white text-4xl p-5">
               Step 3
             </h1>
@@ -357,7 +383,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="bg-[#E9E6E6] h-screen">
+      <div id="packages" className="bg-[#E9E6E6] h-screen">
         <div className="flex flex-col items-center">
           <h1 className="font-smooch font-bold text-black text-6xl p-10">
             Creator Packages
@@ -399,10 +425,10 @@ export default function Home() {
               </div>
               <div className="flex flex-col ">
                 <h1 className="font-poppins font-bold text-xl text-[#393838]">
-                Team
+                  Team
                 </h1>
                 <h2 className="font-poppins font-bold text-4xl text-[#2F71D3]">
-                Enterprise
+                  Enterprise
                 </h2>
               </div>
             </div>
@@ -421,34 +447,30 @@ export default function Home() {
           </div>
         </div>
       </div>
-      
+
       <div className="bg-[#1C1C1C] px-20 py-10 flex justify-between">
         <div className="text-white font-bold font-lg">
-          <h1>
-          © 2023 Artigenious Art, INC 
-          </h1>
-          <h1>
-          All Rights Reserved ®
-          </h1>
+          <h1>© 2023 Artigenious Art, INC</h1>
+          <h1>All Rights Reserved ®</h1>
         </div>
-        
+
         {/* adding logos of social media */}
         <div className="flex space-x-10">
-        <a href="https://instagram.com" target="_blank">
-          <FaInstagramSquare className="text-white text-2xl m-2 hover:scale-125 transition-transform duration-200"/>
+          <a href="https://instagram.com" target="_blank">
+            <FaInstagramSquare className="text-white text-2xl m-2 hover:scale-125 transition-transform duration-200" />
           </a>
           <a href="https://x.com" target="_blank">
-          <BsTwitterX className="text-white text-2xl m-2 hover:scale-125 transition-transform duration-200"/>
+            <BsTwitterX className="text-white text-2xl m-2 hover:scale-125 transition-transform duration-200" />
           </a>
           <a href="https://facebook.com" target="_blank">
-          <FaFacebookF className="text-white text-2xl m-2 hover:scale-125 transition-transform duration-200"/>
+            <FaFacebookF className="text-white text-2xl m-2 hover:scale-125 transition-transform duration-200" />
           </a>
           <a href="https://youtube.com" target="_blank">
-          <FaYoutube className="text-white text-2xl m-2 hover:scale-125 transition-transform duration-200"/>
+            <FaYoutube className="text-white text-2xl m-2 hover:scale-125 transition-transform duration-200" />
           </a>
         </div>
       </div>
-      
+      </body>
     </>
   );
 }
