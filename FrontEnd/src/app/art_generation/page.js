@@ -21,10 +21,13 @@ import artboard2 from "../images/artboard2.png";
 import artboard3 from "../images/artboard3.png";
 import artboard4 from "../images/artboard4.png";
 import coinPng from "../images/coinPng.png";
+import GingerBody from "../images/GingerBody.png";
+
 import { checkout } from "@/checkout";
 
 import { storage } from "../lib/firebase";
 import { ref, listAll, getDownloadURL } from "firebase/storage";
+import { set } from "mongoose";
 
 export default function art_generation() {
   const router = useRouter();
@@ -34,7 +37,30 @@ export default function art_generation() {
   const [images, setImages] = useState([]);
   const [fileUrls, setFileUrls] = useState([]);
 
+  const [traitsType, setTraitsType] = useState("");
+  const [traits, setTraits] = useState({
+    background:
+      "https://firebasestorage.googleapis.com/v0/b/artigenious-f34eb.appspot.com/o/Background%2FAutumn%2350.png?alt=media&token=d4b62e3c-d957-4d2e-8641-0e97cd747f0c",
+    body: GingerBody,
+    face: "https://firebasestorage.googleapis.com/v0/b/artigenious-f34eb.appspot.com/o/Face%2FBTC%20Eyes%2330.png?alt=media&token=265eeff4-db0e-4340-9109-92ca0cc9f19f",
+    dress:
+      "https://firebasestorage.googleapis.com/v0/b/artigenious-f34eb.appspot.com/o/Dress%2FBaggy%23100.png?alt=media&token=02b40925-fd0d-4dc1-b769-e28dee077cbe",
+    head: "https://firebasestorage.googleapis.com/v0/b/artigenious-f34eb.appspot.com/o/Head%2FCrown%2310.png?alt=media&token=73204d69-a6e9-4598-97df-9a409d0b84d2",
+    hand: "https://firebasestorage.googleapis.com/v0/b/artigenious-f34eb.appspot.com/o/Hand%2FBaseball%20Bat%23100.png?alt=media&token=551c5bd3-2f50-4108-9a71-3866eb1ab311",
+    mouth:
+      "https://firebasestorage.googleapis.com/v0/b/artigenious-f34eb.appspot.com/o/Mouth%2FJoint%23100.png?alt=media&token=ea0718e2-f3be-466e-8410-818ba9d99ed8",
+  });
+
+  // Function to update traits state
+  const updateTrait = (traitType, url) => {
+    setTraits((prevTraits) => ({
+      ...prevTraits,
+      [traitType]: url,
+    }));
+  };
+
   const listFiles = async (directory) => {
+    setTraitsType(directory.toLowerCase());
     const listRef = ref(storage, directory);
 
     try {
@@ -42,6 +68,7 @@ export default function art_generation() {
       const urls = await Promise.all(
         res.items.map(async (itemRef) => {
           const url = await getDownloadURL(itemRef);
+          console.log(url);
           return url;
         })
       );
@@ -95,7 +122,7 @@ export default function art_generation() {
       } catch (error) {
         console.error(error);
       }
-    } 
+    }
     // try {
     //   const response = await fetch("http://127.0.0.1:5000/generate", {
     //     method: "POST",
@@ -146,6 +173,69 @@ export default function art_generation() {
 
     return buttons;
   };
+
+  const CombinedImages = ({ traits }) => {
+    return (
+      <div className="relative rounded-t-xl w-full h-full">
+        <Image
+          src={traits.background}
+          width={300}
+          height={300}
+          alt="Background"
+          className="rounded-t-xl absolute inset-0 w-full h-full"
+        />
+        <Image
+          src={GingerBody}
+          width={300}
+          height={300}
+          alt="Body"
+          className="absolute inset-0 w-full h-full"
+          style={{ top: "0", left: "0" }}
+        />
+        <Image
+          src={traits.mouth}
+          width={300}
+          height={300}
+          alt="Mouth"
+          className="absolute inset-0 w-full h-full"
+          style={{ top: "0", left: "0" }}
+        />
+        <Image
+          src={traits.face}
+          width={300}
+          height={300}
+          alt="Face"
+          className="absolute inset-0 w-full h-full"
+          style={{ top: "0", left: "0" }}
+        />
+        <Image
+          src={traits.dress}
+          width={300}
+          height={300}
+          alt="Dress"
+          className="absolute inset-0 w-full h-full"
+          style={{ top: "0", left: "0" }}
+        />
+        <Image
+          src={traits.head}
+          width={300}
+          height={300}
+          alt="Head"
+          className="absolute inset-0 w-full h-full"
+          style={{ top: "0", left: "0" }}
+        />
+        <Image
+          src={traits.hand}
+          width={300}
+          height={300}
+          alt="Hand"
+          className="absolute inset-0 w-full h-full"
+          style={{ top: "0", left: "0" }}
+        />
+      </div>
+    );
+  };
+
   return (
     <div className="mx-auto px-5 py-5 bg-[#FFFAF3] font-poppins">
       <div className="flex space-x-10">
@@ -425,7 +515,7 @@ export default function art_generation() {
                                       Face
                                     </button>
                                     <button
-                                      onClick={() => listFiles("Background")}
+                                      onClick={() => listFiles("Hand")}
                                       className="text-left text-gray-500 border border-gray-300 items-center px-4 py-3 rounded-xl justify-between font-semibold hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0 transition-transform duration-300"
                                     >
                                       Hand
@@ -449,7 +539,8 @@ export default function art_generation() {
                                     </h1>
                                     <div className="custom-scrollbar p-3 grid grid-cols-3 grid-row-3 max-h-96 overflow-y-auto gap-6 w-96">
                                       {fileUrls.map((url, index) => (
-                                        <div
+                                        <button
+                                          onClick={() => updateTrait(traitsType, url)}
                                           key={index}
                                           className="border border-gray-300 rounded-lg overflow-hidden transition-transform duration-300 hover:scale-105"
                                         >
@@ -461,7 +552,7 @@ export default function art_generation() {
                                             height={5}
                                             layout="responsive"
                                           />
-                                        </div>
+                                        </button>
                                       ))}
                                     </div>
                                   </div>
@@ -469,16 +560,17 @@ export default function art_generation() {
                               </div>
                             </div>
                             <div className=" -mt-16 ml-10">
-                              <div className="lg:w-96 lg:h-[22rem] flex flex-col items-center bg-white shadow-lg rounded-xl">
-                                <Image
-                                  src={artboard1}
+                              <div className="lg:h-[26rem] lg:w-[22rem] flex flex-col items-center bg-white shadow-lg rounded-xl">
+                                <CombinedImages traits={traits} />
+                                {/* <Image
+                                  src={traits.body}
                                   alt="Preview Image"
                                   className="rounded-t-lg overflow-auto"
                                   width={300}
                                   height={300}
                                   layout="responsive"
-                                />
-                                <button className="mt-5 bg-[#131313] text-white text-lg w-40 text-center px-4 py-2 rounded-xl hover:scale-110 transition-transform duration-300">
+                                /> */}
+                                <button className="my-5 bg-[#131313] text-white text-lg w-40 text-center px-4 py-2 rounded-xl hover:scale-110 transition-transform duration-300">
                                   Randomize
                                 </button>
                               </div>
