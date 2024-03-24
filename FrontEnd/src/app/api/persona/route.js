@@ -5,7 +5,9 @@ import bcrypt from 'bcrypt';
 
 export async function POST(request){
     const { firstName, lastName, email, password, dob, premiumUser } = await request.json();
+
     await connectMongoDB();
+    
     const hashedPassword = await bcrypt.hash(password, 10);
     await Persona.create({ firstName, lastName, email, password: hashedPassword, dob, premiumUser });
     return NextResponse.json({ message: "Persona created successfully", success: true, }, {status:201});

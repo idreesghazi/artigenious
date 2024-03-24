@@ -26,7 +26,6 @@ if (process.env.NODE_ENV === "development") {
   clientPromise = client.connect();
 }
 
-
 const connectMongoDB = () => {
     
     
@@ -46,5 +45,5 @@ const connectMongoDB = () => {
     console.log("MongoDB connection error", err);
   });
 }
-module.exports = clientPromise;
+// module.exports = clientPromise;
 export default connectMongoDB;
