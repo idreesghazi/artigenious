@@ -1,9 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
+
 
 import orangeLogo from "./images/orangeLogo.png";
 import textArti from "./images/textArti.png";
@@ -28,7 +29,7 @@ import { FaFacebookF } from "react-icons/fa6";
 import { FaYoutube } from "react-icons/fa";
 
 export default function Home() {
-  const { status } = useSession();
+  const { data: session, status } = useSession();
 
   const [isChatboxOpen, setIsChatboxOpen] = useState(false);
   const [chatMessages, setChatMessages] = useState([]);
@@ -36,6 +37,8 @@ export default function Home() {
   const [chatbotModel, setChatbotModel] = useState("OpenAI");
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [selectedModel, setSelectedModel] = useState("OpenAI");
+
+  const [userData, setUserData] = useState(null);
 
   const handleChatButtonClick = () => {
     setIsChatboxOpen(!isChatboxOpen);
@@ -150,13 +153,13 @@ export default function Home() {
           <div className="header flex p-12 w-full justify-between">
             <div className="flex">
               <div className="transition-transform duration-100 hover:scale-110">
-                <Image src={orangeLogo} className="w-20  " />
+                <Image src={orangeLogo} className="w-20" />
               </div>
               <div className="w-96">
                 <Image src={textArti} className="" />
               </div>
             </div>
-            <div className="p-6 space-x-20 mr-20">
+            <div className="flex p-6 space-x-20 mr-20">
               <a
                 href="#home"
                 className="font-mont font-semibold text-black hover:text-orange-400 text-xl"
@@ -176,11 +179,21 @@ export default function Home() {
                 Packages
               </a>
               {status !== "authenticated" ? (
-                <Link href="/login">
-                  <button className="font-mont font-semibold text-[#8155FF] duration-100 transition-transform hover:scale-110 hover:text-blue-900 text-xl">
-                    Login
-                  </button>
-                </Link>
+                <div>
+                  {session ? (
+                    <Link href="/profile">
+                      <button className="font-mont font-semibold text-[#8155FF] duration-100 transition-transform hover:scale-110 hover:text-blue-900 text-xl">
+                        {session.user.name}
+                      </button>
+                    </Link>
+                  ) : (
+                    <Link href="/login">
+                      <button className="font-mont font-semibold text-[#8155FF] duration-100 transition-transform hover:scale-110 hover:text-blue-900 text-xl">
+                        Login
+                      </button>
+                    </Link>
+                  )}
+                </div>
               ) : (
                 <Link href="/">
                   <button
@@ -211,8 +224,8 @@ export default function Home() {
               </Link>
             </div>
 
-            <div className="w-full flex justify-end -mt-16">
-              <Image src={apocCatHome} className="w-11/12 h-11/12" />
+            <div className="lg:w-full flex justify-end -mt-16">
+              <Image src={apocCatHome} className="lg:w-11/12 lg:h-11/12" />
             </div>
 
             <div className={`configure-data ${isSettingsOpen ? "open" : ""}`}>

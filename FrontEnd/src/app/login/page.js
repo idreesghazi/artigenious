@@ -4,7 +4,7 @@ import Cookie from "js-cookie";
 import Image from "next/image";
 import Script from "next/script";
 import { signIn, useSession } from "next-auth/react";
-
+import ReactLoading from "react-loading";
 import { useEffect } from "react";
 
 import { useRouter } from "next/navigation";
@@ -23,21 +23,33 @@ import passwordIcon from "../images/Vector.png";
 import googleIcon from "../images/google.png";
 import facebookIcon from "../images/facebook.png";
 import design from "../images/design.png";
+import { set } from "mongoose";
 
 export default function Login() {
   const session = useSession();
   console.log("your session is : ",session);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [disabledButton, setDisabledButton] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   if (session.status === "authenticated") {
     router.push("/");
   }
 
+  useEffect(() => {
+    if (email.length > 0 && password.length > 0) {
+      setDisabledButton(false);
+    } else {
+      setDisabledButton(true);
+    }
+  }, [email,password]);
+
   const handleLogin = async (e) => {
     e.preventDefault();
     // Call your API endpoint for login
+    setIsLoading(true);
     const res = await fetch("http://localhost:3000/api/login", {
       method: "POST",
       headers: {
@@ -54,6 +66,7 @@ export default function Login() {
         router.push("/"); // Replace '/' with your home page route
       }, 5000); // Delay for toast to be read
     } else {
+      setIsLoading(false);
       toast.error(data.message || "Login failed");
     }
   };
@@ -114,9 +127,27 @@ export default function Login() {
           </h2>
           <button
             onClick={handleLogin}
-            className="p-5 w-120 bg-[#1C1C1C] text-white font-poppins rounded-2xl hover:scale-105 shadow-sm hover:shadow-md transition duration-300 ease-in-out text-lg font-semibold"
-          >
-            Next
+            disabled={disabledButton}
+            className={`p-5 w-120 bg-[#1C1C1C] text-white font-poppins rounded-2xl ${
+              disabledButton
+                ? "opacity-50"
+                : "hover:scale-105 shadow-sm hover:shadow-md transition duration-300 ease-in-out text-lg font-semibold"
+            }`}>
+            {isLoading ? (
+            <div className="flex items-center justify-center">
+              <span className="mr-2">
+                <ReactLoading
+                  type="spin"
+                  color="white"
+                  height={12}
+                  width={12}
+                />
+              </span>
+              <span className="ml-2">Processing...</span>
+            </div>
+          ) : (
+            "Next"
+          )}
           </button>
           <div className="flex items-center space-x-2 my-5">
             <div className="flex-1 border-t border-gray-400"></div>

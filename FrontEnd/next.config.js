@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {}
-
+const path = require('path')
 module.exports = {
 
   images: {
@@ -23,7 +23,7 @@ module.exports = {
 
       fs: false, // the solution
     };
-    
+    config.resolve.alias['@'] = path.resolve(__dirname, 'src');    
     return config;
   },
 };

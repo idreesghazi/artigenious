@@ -81,8 +81,35 @@ export default function art_generation() {
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const toggleModal = () => {
+  const toggleModal = async () => {
     setIsOpen(!isOpen);
+    if (!isOpen) {
+      const chatbotModel = "OpenAI";
+      if (chatbotModel == "OpenAI" || chatbotModel == "Hugging Face") {
+        try {
+          // Send the user's message to the Flask API
+          const response = await fetch("http://127.0.0.1:5002/generateScript", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ query: prompt, model: chatbotModel }),
+          });
+
+          if (!response.ok) {
+            throw new Error("Failed to fetch the chatbot response.");
+          }
+
+          // Get the chatbot's response from the API
+          const data = await response.json();
+          const generateResponse = data.answer;
+          console.log(generateResponse);
+          // Add the chatbot's response to the chat messages
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    }
   };
 
   const imageCards = [
@@ -98,60 +125,35 @@ export default function art_generation() {
       toast.error("Please enter a prompt.");
       return;
     }
-    const chatbotModel = "OpenAI";
-    if (chatbotModel == "OpenAI" || chatbotModel == "Hugging Face") {
-      try {
-        // Send the user's message to the Flask API
-        const response = await fetch("http://127.0.0.1:5002/generateScript", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ query: prompt, model: chatbotModel }),
-        });
+    try {
+      const response = await fetch("http://127.0.0.1:5000/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ prompt }),
+      });
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch the chatbot response.");
-        }
-
-        // Get the chatbot's response from the API
-        const data = await response.json();
-        const generateResponse = data.answer;
-        console.log(generateResponse);
-        // Add the chatbot's response to the chat messages
-      } catch (error) {
-        console.error(error);
+      if (!response.ok) {
+        throw new Error("Failed to generate image");
       }
+
+      const data = await response.json();
+
+      if (data.success) {
+        // Convert encoded image data to blob and create a URL for it
+        const blob = new Blob([Buffer.from(data.image, "latin1")], {
+          type: "image/png",
+        });
+        const url = URL.createObjectURL(blob);
+        setGeneratedImage(url); // Update state with URL to display the image
+        setShowImages(true);
+      } else {
+        toast.error("Error: " + data.error);
+      }
+    } catch (error) {
+      toast.error("Request failed: " + error.message);
     }
-    // try {
-    //   const response = await fetch("http://127.0.0.1:5000/generate", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({ prompt }),
-    //   });
-
-    //   if (!response.ok) {
-    //     throw new Error("Failed to generate image");
-    //   }
-
-    //   const data = await response.json();
-
-    //   if (data.success) {
-    //     // Convert encoded image data to blob and create a URL for it
-    //     const blob = new Blob([Buffer.from(data.image, "latin1")], {
-    //       type: "image/png",
-    //     });
-    //     const url = URL.createObjectURL(blob);
-    //     setGeneratedImage(url); // Update state with URL to display the image
-    //     setShowImages(true);
-    //   } else {
-    //     toast.error("Error: " + data.error);
-    //   }
-    // } catch (error) {
-    //   toast.error("Request failed: " + error.message);
-    // }
   };
 
   const renderButtons = () => {
@@ -173,6 +175,134 @@ export default function art_generation() {
 
     return buttons;
   };
+  
+  const layerCustomization = () => {
+    return(
+      <div className="fixed top-0 left-0 z-50 w-full h-full flex items-center justify-center">
+        <div
+          className="absolute top-0 left-0 w-full h-full bg-gray-900 opacity-50"
+          onClick={toggleModal}
+        ></div>
+        <div className="relative z-50 bg-[#FFFAF3] p-4 rounded-lg shadow-lg ">
+          {/* Close button */}
+          <div>
+            <h1 className="text-xl font-semibold mb-2">
+              Explore Blueprints
+            </h1>
+            <button
+              className="absolute top-0 right-0 mt-2 mr-2 text-gray-600"
+              onClick={toggleModal}
+            >
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M6 18L18 6M6 6l12 12"
+                ></path>
+              </svg>
+            </button>
+          </div>
+          <div className="flex gap-6 justify-center items-center p-5">
+            <div>
+              <h1 className="text-lg font-semibold mb-2">
+                Types
+              </h1>
+              <div className="">
+                <div className="custom-scrollbar py-4 flex space-x-3 max-w-4xl overflow-x-auto mb-10">
+                  {renderButtons()}
+                </div>
+                <div className="flex space-y-2 justify-between">
+                  <div className="w-96 flex flex-col space-y-4">
+                    <h1 className="text-lg font-semibold mb-2">
+                      Layers
+                    </h1>
+                    <button
+                      onClick={() => listFiles("Dress")}
+                      className="text-left text-gray-500 border border-gray-300 items-center px-4 py-3 rounded-xl justify-between font-semibold hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0 transition-transform duration-300"
+                    >
+                      Dress
+                    </button>
+                    <button
+                      onClick={() => listFiles("Face")}
+                      className="text-left text-gray-500 border border-gray-300 items-center px-4 py-3 rounded-xl justify-between font-semibold hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0 transition-transform duration-300"
+                    >
+                      Face
+                    </button>
+                    <button
+                      onClick={() => listFiles("Hand")}
+                      className="text-left text-gray-500 border border-gray-300 items-center px-4 py-3 rounded-xl justify-between font-semibold hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0 transition-transform duration-300"
+                    >
+                      Hand
+                    </button>
+                    <button
+                      onClick={() => listFiles("Head")}
+                      className="text-left text-gray-500 border border-gray-300 items-center px-4 py-3 rounded-xl justify-between font-semibold hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0 transition-transform duration-300"
+                    >
+                      Head
+                    </button>
+                    <button
+                      onClick={() => listFiles("Mouth")}
+                      className="text-left text-gray-500 border border-gray-300 items-center px-4 py-3 rounded-xl justify-between font-semibold hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0 transition-transform duration-300"
+                    >
+                      Mouth
+                    </button>
+                  </div>
+                  <div className="flex flex-col space-y-2">
+                    <h1 className="text-lg font-semibold mb-2">
+                      States
+                    </h1>
+                    <div className="custom-scrollbar p-3 grid grid-cols-3 grid-row-3 max-h-96 overflow-y-auto gap-6 w-96">
+                      {fileUrls.map((url, index) => (
+                        <button
+                          onClick={() =>
+                            updateTrait(traitsType, url)
+                          }
+                          key={index}
+                          className="border border-gray-300 rounded-lg overflow-hidden transition-transform duration-300 hover:scale-105"
+                        >
+                          <Image
+                            src={url}
+                            alt={"image"}
+                            className="rounded-lg "
+                            width={5}
+                            height={5}
+                            layout="responsive"
+                          />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className=" -mt-16 ml-10">
+              <div className="lg:h-[26rem] lg:w-[22rem] flex flex-col items-center bg-white shadow-lg rounded-xl">
+                <CombinedImages traits={traits} />
+                {/* <Image
+                  src={traits.body}
+                  alt="Preview Image"
+                  className="rounded-t-lg overflow-auto"
+                  width={300}
+                  height={300}
+                  layout="responsive"
+                /> */}
+                <button className="my-5 bg-[#131313] text-white text-lg w-40 text-center px-4 py-2 rounded-xl hover:scale-110 transition-transform duration-300">
+                  Randomize
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const CombinedImages = ({ traits }) => {
     return (
@@ -389,7 +519,12 @@ export default function art_generation() {
             <div>
               <div>
                 <h3 className="text-lg font-semibold mb-2">Generated Image</h3>
-                <div className="w-80 rounded-lg overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105">
+                <button
+                  onClick={() => {
+                    toggleModal();
+                  }}
+                  className="w-80 rounded-lg overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105"
+                >
                   <Image
                     src={generatedImage}
                     alt="Generated Art"
@@ -398,12 +533,16 @@ export default function art_generation() {
                     height={100}
                     layout="responsive"
                   />
-                </div>
+                </button>
               </div>
               <h3 className="text-lg font-semibold mb-2">Generation History</h3>
               <div className="grid grid-cols-3 gap-4">
                 {imageCards.map((card, index) => (
-                  <div
+                  <div key={index} className="relative">
+                  <button
+                    onClick={() => {
+                      toggleModal();
+                    }}
                     key={index}
                     className="rounded-lg overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105"
                   >
@@ -415,14 +554,19 @@ export default function art_generation() {
                       height={300}
                       layout="responsive"
                     />
+                  </button>
+                  {isOpen && (
+                    layerCustomization()
+                  )}
                   </div>
+
                 ))}
               </div>
             </div>
           )}
           {generatedImage == "" && ( // Conditional rendering based on showImages state
             <div>
-              <div>
+              {/* <div>
                 <h3 className="text-lg font-semibold mb-2">Generated Image</h3>
                 <div className="w-80 rounded-lg overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105">
                   <Image
@@ -434,7 +578,7 @@ export default function art_generation() {
                     layout="responsive"
                   />
                 </div>
-              </div>
+              </div> */}
               <h3 className="text-lg font-semibold mb-2">Generation History</h3>
               <div className="grid grid-cols-3 gap-4">
                 {imageCards.map((card, index) => (
@@ -457,127 +601,7 @@ export default function art_generation() {
                     </button>
 
                     {isOpen && (
-                      <div className="fixed top-0 left-0 z-50 w-full h-full flex items-center justify-center">
-                        <div
-                          className="absolute top-0 left-0 w-full h-full bg-gray-900 opacity-50"
-                          onClick={toggleModal}
-                        ></div>
-                        <div className="relative z-50 bg-[#FFFAF3] p-4 rounded-lg shadow-lg ">
-                          {/* Close button */}
-                          <div>
-                            <h1 className="text-xl font-semibold mb-2">
-                              Explore Blueprints
-                            </h1>
-                            <button
-                              className="absolute top-0 right-0 mt-2 mr-2 text-gray-600"
-                              onClick={toggleModal}
-                            >
-                              <svg
-                                className="w-6 h-6"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth="2"
-                                  d="M6 18L18 6M6 6l12 12"
-                                ></path>
-                              </svg>
-                            </button>
-                          </div>
-                          <div className="flex gap-6 justify-center items-center p-5">
-                            <div>
-                              <h1 className="text-lg font-semibold mb-2">
-                                Types
-                              </h1>
-                              <div className="">
-                                <div className="custom-scrollbar py-4 flex space-x-3 max-w-4xl overflow-x-auto mb-10">
-                                  {renderButtons()}
-                                </div>
-                                <div className="flex space-y-2 justify-between">
-                                  <div className="w-96 flex flex-col space-y-4">
-                                    <h1 className="text-lg font-semibold mb-2">
-                                      Layers
-                                    </h1>
-                                    <button
-                                      onClick={() => listFiles("Dress")}
-                                      className="text-left text-gray-500 border border-gray-300 items-center px-4 py-3 rounded-xl justify-between font-semibold hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0 transition-transform duration-300"
-                                    >
-                                      Dress
-                                    </button>
-                                    <button
-                                      onClick={() => listFiles("Face")}
-                                      className="text-left text-gray-500 border border-gray-300 items-center px-4 py-3 rounded-xl justify-between font-semibold hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0 transition-transform duration-300"
-                                    >
-                                      Face
-                                    </button>
-                                    <button
-                                      onClick={() => listFiles("Hand")}
-                                      className="text-left text-gray-500 border border-gray-300 items-center px-4 py-3 rounded-xl justify-between font-semibold hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0 transition-transform duration-300"
-                                    >
-                                      Hand
-                                    </button>
-                                    <button
-                                      onClick={() => listFiles("Head")}
-                                      className="text-left text-gray-500 border border-gray-300 items-center px-4 py-3 rounded-xl justify-between font-semibold hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0 transition-transform duration-300"
-                                    >
-                                      Head
-                                    </button>
-                                    <button
-                                      onClick={() => listFiles("Mouth")}
-                                      className="text-left text-gray-500 border border-gray-300 items-center px-4 py-3 rounded-xl justify-between font-semibold hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0 transition-transform duration-300"
-                                    >
-                                      Mouth
-                                    </button>
-                                  </div>
-                                  <div className="flex flex-col space-y-2">
-                                    <h1 className="text-lg font-semibold mb-2">
-                                      States
-                                    </h1>
-                                    <div className="custom-scrollbar p-3 grid grid-cols-3 grid-row-3 max-h-96 overflow-y-auto gap-6 w-96">
-                                      {fileUrls.map((url, index) => (
-                                        <button
-                                          onClick={() => updateTrait(traitsType, url)}
-                                          key={index}
-                                          className="border border-gray-300 rounded-lg overflow-hidden transition-transform duration-300 hover:scale-105"
-                                        >
-                                          <Image
-                                            src={url}
-                                            alt={"image"}
-                                            className="rounded-lg "
-                                            width={5}
-                                            height={5}
-                                            layout="responsive"
-                                          />
-                                        </button>
-                                      ))}
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <div className=" -mt-16 ml-10">
-                              <div className="lg:h-[26rem] lg:w-[22rem] flex flex-col items-center bg-white shadow-lg rounded-xl">
-                                <CombinedImages traits={traits} />
-                                {/* <Image
-                                  src={traits.body}
-                                  alt="Preview Image"
-                                  className="rounded-t-lg overflow-auto"
-                                  width={300}
-                                  height={300}
-                                  layout="responsive"
-                                /> */}
-                                <button className="my-5 bg-[#131313] text-white text-lg w-40 text-center px-4 py-2 rounded-xl hover:scale-110 transition-transform duration-300">
-                                  Randomize
-                                </button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                      layerCustomization()
                     )}
                   </div>
                 ))}
@@ -586,7 +610,7 @@ export default function art_generation() {
           )}
           {/* Prompt Generation */}
           <div>
-            <h3 className="text-lg font-semibold mb-2">Prompt Generation</h3>
+            {/*<h3 className="text-lg font-semibold mb-2">Prompt Generation</h3> */}
             {/* Card layout for prompts */}
           </div>
         </div>
