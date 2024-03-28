@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
-
+import axios from "axios";
 
 import orangeLogo from "./images/orangeLogo.png";
 import textArti from "./images/textArti.png";
@@ -19,6 +19,7 @@ import step2Img from "./images/step2.png";
 import step3Img from "./images/step3.png";
 import blackLogo from "./images/blackLogoArti.png";
 import orangeLogo2 from "./images/orangeLogoArti.png";
+import pfp from "./images/batman.jpg";
 
 import logo from "./images/logo.jpg";
 import ReactLoading from "react-loading"; // Import the loading component
@@ -38,7 +39,26 @@ export default function Home() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [selectedModel, setSelectedModel] = useState("OpenAI");
 
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState("nothing");
+
+  useEffect(() => {
+    fetch("http://localhost:3000/api/myUser", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        // "Authorization": `Bearer ${session?.token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setUserData(data.data.firstName +" "+ data.data.lastName);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }, []);
+
 
   const handleChatButtonClick = () => {
     setIsChatboxOpen(!isChatboxOpen);
@@ -135,6 +155,8 @@ export default function Home() {
     setChatMessages([]);
   };
 
+  
+
   return (
     <>
       <head>
@@ -180,11 +202,13 @@ export default function Home() {
               </a>
               {status !== "authenticated" ? (
                 <div>
-                  {session ? (
-                    <Link href="/profile">
-                      <button className="font-mont font-semibold text-[#8155FF] duration-100 transition-transform hover:scale-110 hover:text-blue-900 text-xl">
-                        {session.user.name}
+                  {userData !== 'nothing' ? (
+                    <Link className="" href={`/profile/${userData}`}>
+                      <button className="flex shadow-lg px-5 py-2 -mt-2 rounded-3xl font-mont font-semibold text-black duration-100 transition-transform hover:scale-110 hover:text-blue-900 text-xl">
+                        {userData}
+                        <Image src={pfp} className="rounded-full w-8 ml-3 -mt-1" />
                       </button>
+                      
                     </Link>
                   ) : (
                     <Link href="/login">
