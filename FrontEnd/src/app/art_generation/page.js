@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 
 import { toast, ToastContainer } from "react-toastify";
@@ -22,6 +22,8 @@ import artboard3 from "../images/artboard3.png";
 import artboard4 from "../images/artboard4.png";
 import coinPng from "../images/coinPng.png";
 import GingerBody from "../images/GingerBody.png";
+import expandBtn from "../images/expandBtn.png";
+import condenseBtn from "../images/condenseBtn.png";
 
 import { checkout } from "@/checkout";
 
@@ -36,7 +38,9 @@ export default function art_generation() {
   const [generatedImage, setGeneratedImage] = useState("");
   const [images, setImages] = useState([]);
   const [fileUrls, setFileUrls] = useState([]);
-
+  const [isExpanded, setIsExpanded] = useState(false);
+  const contentRef = useRef(null);
+  const [contentHeight, setContentHeight] = useState(0);
   const [traitsType, setTraitsType] = useState("");
   const [traits, setTraits] = useState({
     background:
@@ -51,6 +55,9 @@ export default function art_generation() {
       "https://firebasestorage.googleapis.com/v0/b/artigenious-f34eb.appspot.com/o/Mouth%2FJoint%23100.png?alt=media&token=ea0718e2-f3be-466e-8410-818ba9d99ed8",
   });
 
+  const toggleExpansion = () => {
+    setIsExpanded(!isExpanded);
+  };
   // Function to update traits state
   const updateTrait = (traitType, url) => {
     setTraits((prevTraits) => ({
@@ -175,9 +182,9 @@ export default function art_generation() {
 
     return buttons;
   };
-  
+
   const layerCustomization = () => {
-    return(
+    return (
       <div className="fixed top-0 left-0 z-50 w-full h-full flex items-center justify-center">
         <div
           className="absolute top-0 left-0 w-full h-full bg-gray-900 opacity-50"
@@ -186,9 +193,7 @@ export default function art_generation() {
         <div className="relative z-50 bg-[#FFFAF3] p-4 rounded-lg shadow-lg ">
           {/* Close button */}
           <div>
-            <h1 className="text-xl font-semibold mb-2">
-              Explore Blueprints
-            </h1>
+            <h1 className="text-xl font-semibold mb-2">Explore Blueprints</h1>
             <button
               className="absolute top-0 right-0 mt-2 mr-2 text-gray-600"
               onClick={toggleModal}
@@ -211,18 +216,14 @@ export default function art_generation() {
           </div>
           <div className="flex gap-6 justify-center items-center p-5">
             <div>
-              <h1 className="text-lg font-semibold mb-2">
-                Types
-              </h1>
+              <h1 className="text-lg font-semibold mb-2">Types</h1>
               <div className="">
                 <div className="custom-scrollbar py-4 flex space-x-3 max-w-4xl overflow-x-auto mb-10">
                   {renderButtons()}
                 </div>
                 <div className="flex space-y-2 justify-between">
                   <div className="w-96 flex flex-col space-y-4">
-                    <h1 className="text-lg font-semibold mb-2">
-                      Layers
-                    </h1>
+                    <h1 className="text-lg font-semibold mb-2">Layers</h1>
                     <button
                       onClick={() => listFiles("Dress")}
                       className="text-left text-gray-500 border border-gray-300 items-center px-4 py-3 rounded-xl justify-between font-semibold hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0 transition-transform duration-300"
@@ -255,15 +256,11 @@ export default function art_generation() {
                     </button>
                   </div>
                   <div className="flex flex-col space-y-2">
-                    <h1 className="text-lg font-semibold mb-2">
-                      States
-                    </h1>
+                    <h1 className="text-lg font-semibold mb-2">States</h1>
                     <div className="custom-scrollbar p-3 grid grid-cols-3 grid-row-3 max-h-96 overflow-y-auto gap-6 w-96">
                       {fileUrls.map((url, index) => (
                         <button
-                          onClick={() =>
-                            updateTrait(traitsType, url)
-                          }
+                          onClick={() => updateTrait(traitsType, url)}
                           key={index}
                           className="border border-gray-300 rounded-lg overflow-hidden transition-transform duration-300 hover:scale-105"
                         >
@@ -302,7 +299,7 @@ export default function art_generation() {
         </div>
       </div>
     );
-  }
+  };
 
   const CombinedImages = ({ traits }) => {
     return (
@@ -365,6 +362,14 @@ export default function art_generation() {
       </div>
     );
   };
+
+  // animating expansion of prompt guide
+
+  useEffect(() => {
+    if (contentRef.current) {
+      setContentHeight(isExpanded ? contentRef.current.scrollHeight : 0);
+    }
+  }, [isExpanded]);
 
   return (
     <div className="mx-auto px-5 py-5 bg-[#FFFAF3] font-poppins">
@@ -492,6 +497,52 @@ export default function art_generation() {
           <h2 className="text-3xl font-semibold text-[#131313]">
             Generate NFTs
           </h2>
+          {!isExpanded ? (
+            <div
+              ref={contentRef}
+              className="flex font-poppins p-2 rounded-lg transition-all duration-500"
+            >
+              <button onClick={toggleExpansion}>
+                <Image src={expandBtn} alt="Design" width={20} height={20} />
+              </button>
+              <h1 className="font-semibold">Prompt Guide</h1>
+            </div>
+          ) : (
+            <div className="font-poppins p-2 bg-[#f2e4d0] rounded-lg transition-all duration-500">
+              <div className="flex">
+                <button onClick={toggleExpansion}>
+                  <Image
+                    src={condenseBtn}
+                    alt="Design"
+                    width={20}
+                    height={20}
+                  />
+                </button>
+                <h1 className="font-semibold">Prompt Guide</h1>
+              </div>
+              {isExpanded && (
+                <div
+                  ref={contentRef}
+                  className="overflow-hidden transition-all duration-500"
+                  style={{ height: contentHeight }}
+                >
+                  <h1>
+                    Generate NFTs by providing a prompt to the AI model. The AI
+                    model will generate an image based on the prompt provided.
+                  </h1>
+                  <h1>
+                    For instance: "Generate an image of a cat 
+                    <span className="font-semibold text-red-600 mx-1">
+                       with atleast 
+                    </span>
+                    10 
+                    backgrounds, head traits, dress traits, hand traits, mouth
+                    traits, and face traits. etc"
+                  </h1>
+                </div>
+              )}
+            </div>
+          )}
           {/* Text input for NFT description */}
           <div className="flex space-x-10">
             <input
@@ -539,27 +590,24 @@ export default function art_generation() {
               <div className="grid grid-cols-3 gap-4">
                 {imageCards.map((card, index) => (
                   <div key={index} className="relative">
-                  <button
-                    onClick={() => {
-                      toggleModal();
-                    }}
-                    key={index}
-                    className="rounded-lg overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105"
-                  >
-                    <Image
-                      src={card.src}
-                      alt={card.alt}
-                      className="rounded-lg "
-                      width={300}
-                      height={300}
-                      layout="responsive"
-                    />
-                  </button>
-                  {isOpen && (
-                    layerCustomization()
-                  )}
+                    <button
+                      onClick={() => {
+                        toggleModal();
+                      }}
+                      key={index}
+                      className="rounded-lg overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105"
+                    >
+                      <Image
+                        src={card.src}
+                        alt={card.alt}
+                        className="rounded-lg "
+                        width={300}
+                        height={300}
+                        layout="responsive"
+                      />
+                    </button>
+                    {isOpen && layerCustomization()}
                   </div>
-
                 ))}
               </div>
             </div>
@@ -600,9 +648,7 @@ export default function art_generation() {
                       />
                     </button>
 
-                    {isOpen && (
-                      layerCustomization()
-                    )}
+                    {isOpen && layerCustomization()}
                   </div>
                 ))}
               </div>

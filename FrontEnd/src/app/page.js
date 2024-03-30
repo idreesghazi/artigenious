@@ -40,6 +40,7 @@ export default function Home() {
   const [selectedModel, setSelectedModel] = useState("OpenAI");
 
   const [userData, setUserData] = useState("nothing");
+  const [userID, setUserID] = useState("nothing");
 
   useEffect(() => {
     fetch("http://localhost:3000/api/myUser", {
@@ -53,6 +54,7 @@ export default function Home() {
       .then((data) => {
         console.log(data);
         setUserData(data.data.firstName +" "+ data.data.lastName);
+        setUserID(data.data._id);
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -203,7 +205,7 @@ export default function Home() {
               {status !== "authenticated" ? (
                 <div>
                   {userData !== 'nothing' ? (
-                    <Link className="" href={`/profile/${userData}`}>
+                    <Link className="" href={`/profile/${userID}`}>
                       <button className="flex shadow-lg px-5 py-2 -mt-2 rounded-3xl font-mont font-semibold text-black duration-100 transition-transform hover:scale-110 hover:text-blue-900 text-xl">
                         {userData}
                         <Image src={pfp} className="rounded-full w-8 ml-3 -mt-1" />
