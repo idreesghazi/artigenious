@@ -3,7 +3,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { ToastContainer, toast } from "react-toastify";
+import { Bounce, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ReactLoading from "react-loading";
 
@@ -33,8 +33,6 @@ export default function Login() {
 
   const [disabledButton, setDisabledButton] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
-  
 
   useEffect(() => {
     if (
@@ -85,61 +83,75 @@ export default function Login() {
   };
 
   return (
-    <div className="bg-[#FFFFFF] w-full flex justify-center items-center px-20 py-10 space-x-40">
-      <ToastContainer />
+    <div className="bg-[#FFFFFF] w-full flex justify-center items-center h-screen px-20 py-10 space-x-40">
+      <ToastContainer
+        position="bottom-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+        transition={Bounce}
+      />
       <div className="text-center">
         <div className="absolute left-0 bottom-24">
           <Image src={design} className="w-16" />
         </div>
         <h1 className="font-smooch font-bold text-9xl">Create Account</h1>
-        <h2 className="font-poppins text-xl">We are glad to have you!</h2>
+        <h2 className="font-poppins text-xl mb-10 mt-4">
+          We are glad to have you!
+        </h2>
         <div class="flex flex-col space-y-5">
-          <div class="relative flex space-x-20">
+          <div class="relative flex space-x-8">
             <input
               type="text"
               name="firstName"
               onChange={handleChange}
               placeholder="First Name"
-              class="pl-6 pr-4 py-5 bg-[#F2F2F2] border-0 rounded-2xl w-80 focus:border-black font-poppins"
+              class="pl-6 pr-4 py-5  border-2  border-black rounded-2xl w-80 focus:border-black font-poppins"
             />
             <input
               type="text"
               name="lastName"
               onChange={handleChange}
               placeholder="Last Name"
-              class="pl-6 pr-4 py-5 bg-[#F2F2F2] border-0 rounded-2xl w-80 focus:border-black font-poppins"
+              class="pl-6 pr-4 py-5 border-2  border-black rounded-2xl w-80 focus:border-black font-poppins"
             />
           </div>
-          <div class="relative flex space-x-20">
+          <div class="relative flex space-x-8">
             <input
               type="email"
               name="email"
               onChange={handleChange}
               placeholder="Your Email"
-              class="pl-6 pr-4 py-5 bg-[#F2F2F2] border-0 rounded-2xl w-80 focus:border-black font-poppins"
+              class="pl-6 pr-4 py-5 border-2  border-black rounded-2xl w-80 focus:border-black font-poppins"
             />
             <input
               type="date"
               name="dob"
               onChange={handleChange}
               placeholder="Date of Birth dd/mm/yy"
-              class="pl-6 pr-4 py-5 bg-[#F2F2F2] border-0 rounded-2xl w-80 focus:border-black font-poppins"
+              class="pl-6 pr-4 py-5 border-2  border-black rounded-2xl w-80 focus:border-black font-poppins"
             />
           </div>
-          <div class="relative flex space-x-20">
+          <div class="relative flex space-x-8">
             <input
               type="password"
               name="password"
               onChange={handleChange}
               placeholder="Password"
-              class="pl-6 pr-4 py-5 bg-[#F2F2F2] border-0 rounded-2xl w-80 focus:border-black font-poppins"
+              class="pl-6 pr-4 py-5 border-2  border-black rounded-2xl w-80 focus:border-black font-poppins"
             />
             <input
               type="password"
               name="confirmPassword"
               onChange={handleChange}
               placeholder="Confirm Password"
-              class="pl-6 pr-4 py-5 bg-[#F2F2F2] border-0 rounded-2xl w-80 focus:border-black font-poppins"
+              class="pl-6 pr-4 py-5 border-2  border-black rounded-2xl w-80 focus:border-black font-poppins"
             />
           </div>
         </div>
@@ -181,20 +193,20 @@ export default function Login() {
         <div className="flex items-center space-x-2 my-5">
           <div className="flex-1 border-t border-gray-400"></div>
           <span className="px-4 text-xl font-poppins">
-            <span className="font-bold">Login</span> with Others
+            <span className="font-bold">Register</span> with Other Platforms
           </span>
           <div className="flex-1 border-t border-gray-400"></div>
         </div>
-        <div className="flex flex-col items-center space-y-4 font-poppins">
-          <button className="group w-120 flex items-center justify-center space-x-2 p-5 border-2 border-black rounded-2xl shadow-sm hover:shadow-md transition duration-300 ease-in-out">
+        <div className="flex gap-5 my-5 justify-center items-center font-poppins">
+          <button className="group hover:scale-105 w-64 flex items-center justify-center space-x-2 p-5 border-2 border-black rounded-2xl shadow-sm hover:shadow-md transition duration-300 ease-in-out">
             <Image src={googleIcon} className="w-5 h-5 mx-1" />
-            <span className="transition-transform duration-300 group-hover:scale-110">
+            <span className="transition-transform duration-300 ">
               Login with Google
             </span>
           </button>
-          <button className="group w-120 flex items-center justify-center space-x-2 p-5 border-2 border-black rounded-2xl shadow-sm hover:shadow-md transition duration-300 ease-in-out">
+          <button className="group hover:scale-105 w-64 flex items-center justify-center space-x-2 p-5 border-2 border-black rounded-2xl shadow-sm hover:shadow-md transition duration-300 ease-in-out">
             <Image src={facebookIcon} className="w-5 h-5 mx-1" />
-            <span className="transition-transform duration-300 group-hover:scale-110">
+            <span className="transition-transform duration-300">
               Login with Facebook
             </span>
           </button>

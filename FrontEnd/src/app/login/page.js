@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Link from "next/link";
 
-import { toast, ToastContainer } from "react-toastify";
+import { Bounce, toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import orangeLogo from "../images/orangeLogo.png";
@@ -27,11 +27,11 @@ import { set } from "mongoose";
 
 export default function Login() {
   const session = useSession();
-  console.log("your session is : ",session);
+  console.log("your session is : ", session);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [disabledButton, setDisabledButton] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
   if (session.status === "authenticated") {
@@ -44,7 +44,7 @@ export default function Login() {
     } else {
       setDisabledButton(true);
     }
-  }, [email,password]);
+  }, [email, password]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -73,8 +73,20 @@ export default function Login() {
 
   return (
     <>
-      <div className="bg-[#FFFFFF] w-full flex justify-center items-center px-20 py-10 space-x-40">
-        <ToastContainer />
+      <div className="bg-[#FFFFFF] w-full flex justify-center h-screen items-center px-20 py-10 space-x-40">
+        <ToastContainer
+          position="bottom-center"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"
+          transition={Bounce}
+        />
         <div className="text-center">
           <div className="absolute left-0 bottom-24">
             <Image src={design} className="w-16" />
@@ -97,7 +109,7 @@ export default function Login() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Your Email"
-                class="pl-12 pr-4 py-5 bg-[#F2F2F2] border-0 rounded-2xl w-120 focus:border-black font-poppins"
+                class="pl-12 pr-4 py-5  border-black border-2 rounded-2xl w-120 focus:border-black font-poppins"
               />
             </div>
             <div class="relative">
@@ -111,7 +123,7 @@ export default function Login() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Password"
-                class="pl-12 pr-4 py-5 bg-[#F2F2F2] border-0 rounded-2xl w-120 focus:border-black font-poppins"
+                class="pl-12 pr-4 py-5 border-black border-2 rounded-2xl w-120 focus:border-black font-poppins"
               />
             </div>
           </div>
@@ -132,22 +144,23 @@ export default function Login() {
               disabledButton
                 ? "opacity-50"
                 : "hover:scale-105 shadow-sm hover:shadow-md transition duration-300 ease-in-out text-lg font-semibold"
-            }`}>
+            }`}
+          >
             {isLoading ? (
-            <div className="flex items-center justify-center">
-              <span className="mr-2">
-                <ReactLoading
-                  type="spin"
-                  color="white"
-                  height={12}
-                  width={12}
-                />
-              </span>
-              <span className="ml-2">Processing...</span>
-            </div>
-          ) : (
-            "Next"
-          )}
+              <div className="flex items-center justify-center">
+                <span className="mr-2">
+                  <ReactLoading
+                    type="spin"
+                    color="white"
+                    height={12}
+                    width={12}
+                  />
+                </span>
+                <span className="ml-2">Processing...</span>
+              </div>
+            ) : (
+              "Next"
+            )}
           </button>
           <div className="flex items-center space-x-2 my-5">
             <div className="flex-1 border-t border-gray-400"></div>
@@ -159,16 +172,14 @@ export default function Login() {
           <div className="flex flex-col items-center space-y-4 font-poppins">
             <button
               onClick={() => signIn("google")}
-              className="group w-120 flex items-center justify-center space-x-2 p-5 border-2 border-black rounded-2xl shadow-sm hover:shadow-md transition duration-300 ease-in-out"
+              className="group w-120 hover:scale-105 flex items-center justify-center space-x-2 p-5 border-2 border-black rounded-2xl shadow-sm hover:shadow-md transition duration-300 ease-in-out"
             >
               <Image src={googleIcon} className="w-5 h-5 mx-1" />
-              <span className="transition-transform duration-300 group-hover:scale-110">
-                Login with Google{" "}
-              </span>
+              <span className=" ">Login with Google </span>
             </button>
-            <button className="group w-120 flex items-center justify-center space-x-2 p-5 border-2 border-black rounded-2xl shadow-sm hover:shadow-md transition duration-300 ease-in-out">
+            <button className="group hover:scale-105 w-120 flex items-center justify-center space-x-2 p-5 border-2 border-black rounded-2xl shadow-sm hover:shadow-md transition duration-300 ease-in-out">
               <Image src={facebookIcon} className="w-5 h-5 mx-1" />
-              <span className="transition-transform duration-300 group-hover:scale-110">
+              <span className="transition-transform hover:scale-105 duration-300 ">
                 Login with Facebook
               </span>
             </button>

@@ -1,16 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Smooch+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Smooch+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 body {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
 }
 
 .chatbot-container {
@@ -30,9 +29,8 @@ body {
 }
 
 .chat-button:hover {
-  background-color: #FFFAF3;
+  background-color: #fffaf3;
   transform: scale(1.1);
-
 }
 
 .chat-button.open {
@@ -46,7 +44,6 @@ body {
   padding: 10px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
   border-radius: 30px;
-
 }
 
 .configureBox {
@@ -58,7 +55,7 @@ body {
   border-radius: 5px;
 }
 .gradient-background {
-  background: linear-gradient(to bottom, #ec7b4f, #FB9E50);
+  background: linear-gradient(to bottom, #ec7b4f, #fb9e50);
 }
 .configure-data {
   max-height: 0;
@@ -116,7 +113,7 @@ body {
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #FF8C32;
+    background: #ff8c32;
     border-radius: 100vh;
     border: 3px solid #f6f7ed;
   }
@@ -124,4 +121,26 @@ body {
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background: #e49d0e;
   }
+}
+/* Customizes the entire scrollbar */
+::-webkit-scrollbar {
+  width: 8px; /* Adjust the width of the scrollbar */
+  border-radius: 50px;
+}
+
+/* Customizes the scrollbar track (background) */
+::-webkit-scrollbar-track {
+  background: #fffaf3; /* Light grey track */
+}
+
+/* Customizes the scrollbar handle */
+::-webkit-scrollbar-thumb {
+  background: #ff8c32; /* Dark grey handle */
+  border-radius: 50px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #ff8c32; /* Lighten the handle slightly when hovered */
+  border-radius: 50px;
 }

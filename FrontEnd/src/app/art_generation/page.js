@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 
-import { toast, ToastContainer } from "react-toastify";
+import { Bounce, toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ReactLoading from "react-loading";
 
@@ -235,7 +235,7 @@ export default function art_generation() {
         <button
           key={i}
           onClick={toggleModal}
-          className="w-auto text-left bg-white text-gray-500 border border-gray-300 items-center px-4 py-3 rounded-xl justify-between font-semibold hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0 transition-transform duration-300"
+          className="w-auto text-left bg-white text-gray-500 border border-gray-300 items-center px-4 py-3 rounded-xl justify-between  hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0 transition-transform duration-300"
         >
           <div>{`${i}%`}</div>
           <div>{`Blocky Green`}</div>
@@ -250,19 +250,19 @@ export default function art_generation() {
     return (
       <div className="fixed top-0 left-0 z-50 w-full h-full flex items-center justify-center">
         <div
-          className="absolute top-0 left-0 w-full h-full bg-gray-900 opacity-50"
+          className="absolute top-0 left-0 w-full h-full bg-orange-100/10 backdrop-blur-sm"
           onClick={toggleModal}
         ></div>
-        <div className="relative z-50 bg-[#FFFAF3] p-4 rounded-lg shadow-lg ">
+        <div className="relative z-50 bg-white p-8 rounded-lg shadow-lg border  ">
           {/* Close button */}
           <div>
-            <h1 className="text-xl font-semibold mb-2">Explore Blueprints</h1>
+            <h1 className="text-4xl font-semibold mb-2">Explore Blueprints</h1>
             <button
-              className="absolute top-0 right-0 mt-2 mr-2 text-gray-600"
+              className="absolute top-3 right-3 mt-2 mr-2 text-gray-600"
               onClick={toggleModal}
             >
               <svg
-                className="w-6 h-6"
+                className="w-8 h-8"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -279,48 +279,48 @@ export default function art_generation() {
           </div>
           <div className="flex gap-6 justify-center items-center p-5">
             <div>
-              <h1 className="text-lg font-semibold mb-2">Types</h1>
+              <h1 className="text-xl font-semibold mb-2">Types</h1>
               <div className="">
                 <div className="custom-scrollbar py-4 flex space-x-3 max-w-4xl overflow-x-auto mb-10">
                   {renderButtons()}
                 </div>
                 <div className="flex space-y-2 justify-between">
                   <div className="w-96 flex flex-col space-y-4">
-                    <h1 className="text-lg font-semibold mb-2">Layers</h1>
+                    <h1 className="text-xl font-semibold mb-2">Layers</h1>
                     <button
                       onClick={() => listFiles("Dress")}
-                      className="text-left text-gray-500 border border-gray-300 items-center px-4 py-3 rounded-xl justify-between font-semibold hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0 transition-transform duration-300"
+                      className="text-left text-gray-500 border border-gray-400 items-center px-4 py-3 rounded-xl justify-between  hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-[#FF8C32] transition-transform duration-300"
                     >
                       Dress
                     </button>
                     <button
                       onClick={() => listFiles("Face")}
-                      className="text-left text-gray-500 border border-gray-300 items-center px-4 py-3 rounded-xl justify-between font-semibold hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0 transition-transform duration-300"
+                      className="text-left text-gray-500 border border-gray-400 items-center px-4 py-3 rounded-xl justify-between  hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-[#FF8C32] transition-transform duration-300"
                     >
                       Face
                     </button>
                     <button
                       onClick={() => listFiles("Hand")}
-                      className="text-left text-gray-500 border border-gray-300 items-center px-4 py-3 rounded-xl justify-between font-semibold hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0 transition-transform duration-300"
+                      className="text-left text-gray-500 border border-gray-400 items-center px-4 py-3 rounded-xl justify-between  hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-[#FF8C32] transition-transform duration-300"
                     >
                       Hand
                     </button>
                     <button
                       onClick={() => listFiles("Head")}
-                      className="text-left text-gray-500 border border-gray-300 items-center px-4 py-3 rounded-xl justify-between font-semibold hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0 transition-transform duration-300"
+                      className="text-left text-gray-500 border border-gray-400 items-center px-4 py-3 rounded-xl justify-between  hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-[#FF8C32] transition-transform duration-300"
                     >
                       Head
                     </button>
                     <button
                       onClick={() => listFiles("Mouth")}
-                      className="text-left text-gray-500 border border-gray-300 items-center px-4 py-3 rounded-xl justify-between font-semibold hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0 transition-transform duration-300"
+                      className="text-left text-gray-500 border border-gray-400 items-center px-4 py-3 rounded-xl justify-between  hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-[#FF8C32] transition-transform duration-300"
                     >
                       Mouth
                     </button>
                   </div>
                   <div className="flex flex-col space-y-2">
-                    <h1 className="text-lg font-semibold mb-2">States</h1>
-                    <div className="custom-scrollbar p-3 grid grid-cols-3 grid-row-3 max-h-96 overflow-y-auto gap-6 w-96">
+                    <h1 className="text-xl font-semibold mb-2">States</h1>
+                    <div className="custom-scrollbar p-3 grid grid-cols-3 grid-row-3 max-h-80 overflow-y-auto gap-6 w-96">
                       {fileUrls.map((url, index) => (
                         <button
                           onClick={() => updateTrait(traitsType, url)}
@@ -461,7 +461,19 @@ export default function art_generation() {
 
   return (
     <div className="mx-auto px-5 py-5 bg-[#FFFAF3] font-poppins">
-      <ToastContainer />
+      <ToastContainer
+        position="bottom-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+        transition={Bounce}
+      />
       <div className="flex space-x-10">
         {/* Left section */}
         <div className="w-96">
@@ -496,7 +508,7 @@ export default function art_generation() {
             {/* Buttons for dimensions */}
             <div className="space-x-3">
               <button
-                className={`w-36 font-semibold py-2 rounded-xl border border-[#000000] border-opacity-10 transition-transform duration-300 ${
+                className={`w-36  py-2 rounded-xl border border-[#000000] border-opacity-10 transition-transform duration-300 ${
                   activeButtonDim === "512x512"
                     ? "bg-[#FF8C32] text-white shadow-md border-0"
                     : "bg-white hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0"
@@ -506,9 +518,9 @@ export default function art_generation() {
                 512 x 512
               </button>
               <button
-                className={`w-36 font-semibold py-2 rounded-xl border border-[#000000] border-opacity-10 transition-transform duration-300 ${
+                className={`w-36  py-2 rounded-xl border border-[#000000] border-opacity-10 transition-transform duration-300 ${
                   activeButtonDim === "1024x1024"
-                    ? "bg-[#FF8C32] text-white shadow-md border-0"
+                    ? "bg-[#FF8C32] text-white shadow-md border-[#FF8C32]"
                     : "bg-white hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0"
                 }`}
                 onClick={() => handleActiveButtonClickDim("1024x1024")}
@@ -519,20 +531,20 @@ export default function art_generation() {
 
             <div className="space-x-3 mt-3">
               <button
-                className={`w-36 font-semibold py-2 rounded-xl border border-[#000000] border-opacity-10 transition-transform duration-300 ${
+                className={`w-36 py-2 rounded-xl border border-[#000000] border-opacity-10 transition-all duration-300 ${
                   activeButtonDim === "768x1368"
-                    ? "bg-[#FF8C32] text-white shadow-md border-0"
-                    : "bg-white hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0"
+                    ? "bg-[#FF8C32] text-white shadow-md border-[#FF8C32]"
+                    : "bg-white hover:bg-[#FF8C32] hover:text-white hover:shadow-md "
                 }`}
                 onClick={() => handleActiveButtonClickDim("768x1368")}
               >
                 768x1368
               </button>
               <button
-                className={`w-36 font-semibold py-2 rounded-xl border border-[#000000] border-opacity-10 transition-transform duration-300 ${
+                className={`w-36 py-2 rounded-xl border border-[#000000] border-opacity-10 transition-all duration-300 ${
                   activeButtonDim === "1024x768"
-                    ? "bg-[#FF8C32] text-white shadow-md border-0"
-                    : "bg-white hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0"
+                    ? "bg-[#FF8C32] text-white shadow-md border-[#FF8C32]"
+                    : "bg-white hover:bg-[#FF8C32] hover:text-white hover:shadow-md "
                 }`}
                 onClick={() => handleActiveButtonClickDim("1024x768")}
               >
@@ -549,9 +561,9 @@ export default function art_generation() {
               {[1, 2, 3, 4].map((number) => (
                 <button
                   key={number}
-                  className={`w-16 font-semibold py-2 rounded-xl border border-[#000000] border-opacity-10 transition-transform duration-300 ${
+                  className={`w-16  py-2 rounded-xl border border-[#000000] border-opacity-10 transition-all duration-300 ${
                     activeButtonNum === number
-                      ? "bg-[#FF8C32] text-white shadow-md border-0"
+                      ? "bg-[#FF8C32] text-white shadow-md border-[#FF8C32]"
                       : "bg-white hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0"
                   }`}
                   onClick={() => handleActiveButtonClickNum(number)}
@@ -565,9 +577,9 @@ export default function art_generation() {
               {[5, 6, 7, 8].map((number) => (
                 <button
                   key={number}
-                  className={`w-16 font-semibold py-2 rounded-xl border border-[#000000] border-opacity-10 transition-transform duration-300 ${
+                  className={`w-16  py-2 rounded-xl border border-[#000000] border-opacity-10 transition-all duration-300 ${
                     activeButtonNum === number
-                      ? "bg-[#FF8C32] text-white shadow-md border-0"
+                      ? "bg-[#FF8C32] text-white shadow-md border-[#FF8C32]  "
                       : "bg-white hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0"
                   }`}
                   onClick={() => handleActiveButtonClickNum(number)}
@@ -579,30 +591,30 @@ export default function art_generation() {
           </div>
           {/* Art Style */}
           <div className="border-t-2 border-[#D15C00] py-8 border-opacity-30">
-            <h3 className="text-lg font-semibold mb-2 ml-2">Art Style</h3>
+            <h3 className="text-lg font-semibold  mb-2 ml-2">Art Style</h3>
             {/* Buttons for art styles */}
             <div className="space-x-3 ">
-              <button className="bg-white border w-36 border-[#000000] border-opacity-10 font-semibold py-2 rounded-xl hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0 transition-transform duration-300">
+              <button className="bg-white border w-36 border-[#000000] border-opacity-10 font-normal py-2 rounded-xl  hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-[#FF8C32]  transition-all duration-300">
                 Anime
               </button>
-              <button className="bg-white border w-36 border-[#000000] border-opacity-10 font-semibold py-2 rounded-xl hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0 transition-transform duration-300">
+              <button className="bg-white border w-36 border-[#000000] border-opacity-10 font-normal py-2 rounded-xl hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-[#FF8C32] transition-all  duration-300">
                 Realistic
               </button>
             </div>
 
             <div className="space-x-3 mt-3">
-              <button className="bg-white border w-36 border-[#000000] border-opacity-10 font-semibold py-2 rounded-xl hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0 transition-transform duration-300">
+              <button className="bg-white border w-36 border-[#000000] border-opacity-10 font-normal py-2 rounded-xl hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-[#FF8C32] transition-all  duration-300">
                 Chibby
               </button>
-              <button className="bg-white border w-36 border-[#000000] border-opacity-10 font-semibold py-2 rounded-xl hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0 transition-transform duration-300">
+              <button className="bg-white border w-36 border-[#000000] border-opacity-10 font-normal py-2 rounded-xl hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-[#FF8C32] transition-all  duration-300">
                 Doodle
               </button>
             </div>
             <div className="space-x-3 mt-3">
-              <button className="bg-white border w-36 border-[#000000] border-opacity-10 font-semibold py-2 rounded-xl hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0 transition-transform duration-300">
+              <button className="bg-white border w-36 border-[#000000] border-opacity-10 font-normal py-2 rounded-xl hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-[#FF8C32] transition-all  duration-300">
                 Sketch
               </button>
-              <button className="bg-white border w-36 border-[#000000] border-opacity-10 font-semibold py-2 rounded-xl hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0 transition-transform duration-300">
+              <button className="bg-white border w-36 border-[#000000] border-opacity-10 font-normal py-2 rounded-xl hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-[#FF8C32] transition-all duration-300">
                 3d Art
               </button>
             </div>
@@ -712,7 +724,7 @@ export default function art_generation() {
                   onClick={() => {
                     toggleModal();
                   }}
-                  className="w-80 rounded-lg overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105"
+                  className="w-full rounded-lg overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105"
                 >
                   <Image
                     src={generatedImage}
@@ -765,7 +777,9 @@ export default function art_generation() {
                   />
                 </div>
               </div> */}
-              <h3 className="text-lg font-semibold mb-2">Generation History</h3>
+              <h3 className="text-2xl font-semibold mb-4">
+                Generation History
+              </h3>
               <div className="grid grid-cols-3 gap-4">
                 {imageCards.map((card, index) => (
                   <div key={index} className="relative">
