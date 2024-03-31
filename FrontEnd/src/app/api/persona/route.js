@@ -9,18 +9,22 @@ export async function POST(request) {
 
     console.log("Request body: ", request.body);
 
-
-    const user = await Persona.findOne({ email }); // Use await to get the result
-    console.log("User: ", user);
-    if (user) { // Check if user is truthy (found)
-      return NextResponse.json(
-        { message: "User already exists", success: false },
-        { status: 400 }
-      );
+    try {
+      const user = await Persona.findOne({ email }); // Use await to get the result
+      console.log("User: ", user);
+      if (user) {
+        // Check if user is truthy (found)
+        return NextResponse.json(
+          { message: "User already exists", success: false },
+          { status: 400 }
+        );
+      }
+    } catch (error) {
+      console.log("Error: ", error);
     }
 
     await connectMongoDB();
-    
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = await Persona.create({

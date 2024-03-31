@@ -6,8 +6,10 @@ import Link from "next/link";
 
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ReactLoading from "react-loading";
 
 import orangeLogo from "../images/orangeLogo.png";
+import orangeLogoArti from "../images/orangeLogoArti.png";
 import textArti from "../images/textArti.png";
 import apocCatHome from "../images/apocCatHome.png";
 import loginImage from "../images/loginImage.png";
@@ -33,7 +35,13 @@ import { set } from "mongoose";
 
 export default function art_generation() {
   const router = useRouter();
+
+  const [loading, setLoading] = useState(false);
   const [showImages, setShowImages] = useState(false);
+  const [activeButtonDim, setActiveButtonDim] = useState("512x512");
+  const [activeButtonNum, setActiveButtonNum] = useState(1);
+  const [activeButtonStyle, setActiveButtonStyle] = useState("Anime");
+
   const [prompt, setPrompt] = useState("");
   const [generatedImage, setGeneratedImage] = useState("");
   const [images, setImages] = useState([]);
@@ -55,8 +63,51 @@ export default function art_generation() {
       "https://firebasestorage.googleapis.com/v0/b/artigenious-f34eb.appspot.com/o/Mouth%2FJoint%23100.png?alt=media&token=ea0718e2-f3be-466e-8410-818ba9d99ed8",
   });
 
+  const [segmentedImage, setSegmentedImage] = useState(null);
+
+  const handleSegmentClick = async () => {
+    if (!generatedImage) {
+      toast.error("Please generate an image first.");
+      return;
+    }
+    console.log(generatedImage);
+    // setLoading(true);
+    try {
+      const segmentResponse = await fetch("http://127.0.0.1:5003/segment2", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ imageUrl: generatedImage }), // Send the generated image URL
+      });
+
+      if (!segmentResponse.ok) {
+        throw new Error("Failed to segment image");
+      }
+
+      // Convert the response to image data
+      const imageData = await segmentResponse.blob();
+      console.log(imageData);
+      const url = URL.createObjectURL(imageData);
+      setSegmentedImage(url); // Set the segmented image URL to state
+    } catch (error) {
+      toast.error("Request failed: " + error.message);
+    } finally {
+      // setLoading(false);
+    }
+  };
+
   const toggleExpansion = () => {
     setIsExpanded(!isExpanded);
+  };
+  const handleActiveButtonClickDim = (dimension) => {
+    setActiveButtonDim(dimension);
+  };
+  const handleActiveButtonClickNum = (number) => {
+    setActiveButtonNum(number);
+  };
+  const setActiveButtonClickedStyle = (style) => {
+    setActiveButtonStyle(style);
   };
   // Function to update traits state
   const updateTrait = (traitType, url) => {
@@ -90,6 +141,7 @@ export default function art_generation() {
 
   const toggleModal = async () => {
     setIsOpen(!isOpen);
+
     if (!isOpen) {
       const chatbotModel = "OpenAI";
       if (chatbotModel == "OpenAI" || chatbotModel == "Hugging Face") {
@@ -116,6 +168,7 @@ export default function art_generation() {
           console.error(error);
         }
       }
+      handleSegmentClick();
     }
   };
 
@@ -132,13 +185,21 @@ export default function art_generation() {
       toast.error("Please enter a prompt.");
       return;
     }
+
+    const traitsStartIndex = prompt.indexOf("with atleast");
+    if (traitsStartIndex === -1) {
+      toast.error("Please provide traits in the prompt.");
+      return;
+    }
+    const traitsString = prompt.substring(0, traitsStartIndex).trim();
+    setLoading(true);
     try {
       const response = await fetch("http://127.0.0.1:5000/generate", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ prompt }),
+        body: JSON.stringify({ prompt: traitsString }),
       });
 
       if (!response.ok) {
@@ -160,6 +221,8 @@ export default function art_generation() {
       }
     } catch (error) {
       toast.error("Request failed: " + error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -183,7 +246,7 @@ export default function art_generation() {
     return buttons;
   };
 
-  const layerCustomization = () => {
+  const layerCustomization = (url) => {
     return (
       <div className="fixed top-0 left-0 z-50 w-full h-full flex items-center justify-center">
         <div
@@ -279,10 +342,22 @@ export default function art_generation() {
                 </div>
               </div>
             </div>
-            <div className=" -mt-16 ml-10">
-              <div className="lg:h-[26rem] lg:w-[22rem] flex flex-col items-center bg-white shadow-lg rounded-xl">
-                <CombinedImages traits={traits} />
-                {/* <Image
+            <div className="flex flex-col justify-between items-center mt-20">
+              <div className=" -mt-16 ml-10">
+                <div className="lg:h-[26rem] lg:w-[22rem] flex flex-col items-center bg-white shadow-lg rounded-xl">
+                  {url === "" ? (
+                    <CombinedImages traits={traits} />
+                  ) : (
+                    <Image
+                      src={url}
+                      alt="Generated Art"
+                      className="rounded-lg"
+                      width={300}
+                      height={300}
+                      layout="responsive"
+                    />
+                  )}
+                  {/* <Image
                   src={traits.body}
                   alt="Preview Image"
                   className="rounded-t-lg overflow-auto"
@@ -290,10 +365,23 @@ export default function art_generation() {
                   height={300}
                   layout="responsive"
                 /> */}
-                <button className="my-5 bg-[#131313] text-white text-lg w-40 text-center px-4 py-2 rounded-xl hover:scale-110 transition-transform duration-300">
-                  Randomize
-                </button>
+                  <button
+                    onClick={() => setGeneratedImage("")}
+                    className="my-5 bg-[#131313] text-white text-lg w-40 text-center px-4 py-2 rounded-xl hover:scale-110 transition-transform duration-300"
+                  >
+                    Randomize
+                  </button>
+                </div>
+                {/* <div>
+              {segmentedImage && <Image src={segmentedImage} alt="Segmented Image" width={100} height={100} />}
+              </div> */}
               </div>
+              {/* <button
+                onClick={() => setGeneratedImage("")}
+                className="my-5 bg-[#FF8C32] text-white text-lg w-full self-end mt-20 text-center px-4 py-2 rounded-xl hover:scale-110 transition-transform duration-300"
+              >
+                Generate Collection
+              </button> */}
             </div>
           </div>
         </div>
@@ -373,6 +461,7 @@ export default function art_generation() {
 
   return (
     <div className="mx-auto px-5 py-5 bg-[#FFFAF3] font-poppins">
+      <ToastContainer />
       <div className="flex space-x-10">
         {/* Left section */}
         <div className="w-96">
@@ -405,20 +494,48 @@ export default function art_generation() {
           <div className="border-t-2 border-[#D15C00] py-8 border-opacity-30">
             <h3 className="text-lg font-semibold mb-2 ml-2">Image Dimension</h3>
             {/* Buttons for dimensions */}
-            <div className="space-x-3 ">
-              <button className="bg-white border w-36 border-[#000000] border-opacity-10 font-semibold py-2 rounded-xl hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0 transition-transform duration-300">
+            <div className="space-x-3">
+              <button
+                className={`w-36 font-semibold py-2 rounded-xl border border-[#000000] border-opacity-10 transition-transform duration-300 ${
+                  activeButtonDim === "512x512"
+                    ? "bg-[#FF8C32] text-white shadow-md border-0"
+                    : "bg-white hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0"
+                }`}
+                onClick={() => handleActiveButtonClickDim("512x512")}
+              >
                 512 x 512
               </button>
-              <button className="bg-white border w-36 border-[#000000] border-opacity-10 font-semibold py-2 rounded-xl hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0 transition-transform duration-300">
+              <button
+                className={`w-36 font-semibold py-2 rounded-xl border border-[#000000] border-opacity-10 transition-transform duration-300 ${
+                  activeButtonDim === "1024x1024"
+                    ? "bg-[#FF8C32] text-white shadow-md border-0"
+                    : "bg-white hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0"
+                }`}
+                onClick={() => handleActiveButtonClickDim("1024x1024")}
+              >
                 1024x1024
               </button>
             </div>
 
             <div className="space-x-3 mt-3">
-              <button className="bg-white border w-36 border-[#000000] border-opacity-10 font-semibold py-2 rounded-xl hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0 transition-transform duration-300">
+              <button
+                className={`w-36 font-semibold py-2 rounded-xl border border-[#000000] border-opacity-10 transition-transform duration-300 ${
+                  activeButtonDim === "768x1368"
+                    ? "bg-[#FF8C32] text-white shadow-md border-0"
+                    : "bg-white hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0"
+                }`}
+                onClick={() => handleActiveButtonClickDim("768x1368")}
+              >
                 768x1368
               </button>
-              <button className="bg-white border w-36 border-[#000000] border-opacity-10 font-semibold py-2 rounded-xl hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0 transition-transform duration-300">
+              <button
+                className={`w-36 font-semibold py-2 rounded-xl border border-[#000000] border-opacity-10 transition-transform duration-300 ${
+                  activeButtonDim === "1024x768"
+                    ? "bg-[#FF8C32] text-white shadow-md border-0"
+                    : "bg-white hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0"
+                }`}
+                onClick={() => handleActiveButtonClickDim("1024x768")}
+              >
                 1024x768
               </button>
             </div>
@@ -428,36 +545,37 @@ export default function art_generation() {
             <h3 className="text-lg font-semibold mb-2 ml-2">
               Number of Images
             </h3>
-            <div className="space-x-3 ">
-              <button className="bg-white border w-16 border-[#000000] border-opacity-10 font-semibold py-2 rounded-xl hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0 transition-transform duration-300">
-                1
-              </button>
-              <button className="bg-white border w-16 border-[#000000] border-opacity-10 font-semibold py-2 rounded-xl hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0 transition-transform duration-300">
-                2
-              </button>
-              <button className="bg-white border w-16 border-[#000000] border-opacity-10 font-semibold py-2 rounded-xl hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0 transition-transform duration-300">
-                3
-              </button>
-              <button className="bg-white border w-16 border-[#000000] border-opacity-10 font-semibold py-2 rounded-xl hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0 transition-transform duration-300">
-                4
-              </button>
+            <div className="space-x-3">
+              {[1, 2, 3, 4].map((number) => (
+                <button
+                  key={number}
+                  className={`w-16 font-semibold py-2 rounded-xl border border-[#000000] border-opacity-10 transition-transform duration-300 ${
+                    activeButtonNum === number
+                      ? "bg-[#FF8C32] text-white shadow-md border-0"
+                      : "bg-white hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0"
+                  }`}
+                  onClick={() => handleActiveButtonClickNum(number)}
+                >
+                  {number}
+                </button>
+              ))}
             </div>
 
             <div className="space-x-3 mt-3">
-              <button className="bg-white border w-16 border-[#000000] border-opacity-10 font-semibold py-2 rounded-xl hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0 transition-transform duration-300">
-                5
-              </button>
-              <button className="bg-white border w-16 border-[#000000] border-opacity-10 font-semibold py-2 rounded-xl hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0 transition-transform duration-300">
-                6
-              </button>
-              <button className="bg-white border w-16 border-[#000000] border-opacity-10 font-semibold py-2 rounded-xl hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0 transition-transform duration-300">
-                7
-              </button>
-              <button className="bg-white border w-16 border-[#000000] border-opacity-10 font-semibold py-2 rounded-xl hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0 transition-transform duration-300">
-                8
-              </button>
+              {[5, 6, 7, 8].map((number) => (
+                <button
+                  key={number}
+                  className={`w-16 font-semibold py-2 rounded-xl border border-[#000000] border-opacity-10 transition-transform duration-300 ${
+                    activeButtonNum === number
+                      ? "bg-[#FF8C32] text-white shadow-md border-0"
+                      : "bg-white hover:bg-[#FF8C32] hover:text-white hover:shadow-md hover:border-0"
+                  }`}
+                  onClick={() => handleActiveButtonClickNum(number)}
+                >
+                  {number}
+                </button>
+              ))}
             </div>
-            {/* Buttons for number of images */}
           </div>
           {/* Art Style */}
           <div className="border-t-2 border-[#D15C00] py-8 border-opacity-30">
@@ -531,13 +649,12 @@ export default function art_generation() {
                     model will generate an image based on the prompt provided.
                   </h1>
                   <h1>
-                    For instance: "Generate an image of a cat 
+                    For instance: "Generate an image of a cat
                     <span className="font-semibold text-red-600 mx-1">
-                       with atleast 
+                      with atleast
                     </span>
-                    10 
-                    backgrounds, head traits, dress traits, hand traits, mouth
-                    traits, and face traits. etc"
+                    10 backgrounds, head traits, dress traits, hand traits,
+                    mouth traits, and face traits. etc"
                   </h1>
                 </div>
               )}
@@ -566,6 +683,27 @@ export default function art_generation() {
             </button>
           </div>
           {/* Generation History */}
+          {loading && (
+            <div className="relative bg-gray-200 bg-opacity-40 w-80 h-80 flex flex-col items-center justify-center rounded-xl">
+              <ReactLoading
+                className="absolute z-10 top-2 left-2"
+                type="spin"
+                color="#000"
+                height={20}
+                width={20}
+              />
+              <Image
+                src={orangeLogoArti}
+                className="opacity-50 rounded-xl"
+                alt="Design"
+                width={50}
+                height={50}
+              />
+              <h1 className="opacity-50 font-poppins font-bold mt-4">
+                Please Wait...
+              </h1>
+            </div>
+          )}
           {generatedImage != "" && ( // Conditional rendering based on showImages state
             <div>
               <div>
@@ -606,7 +744,7 @@ export default function art_generation() {
                         layout="responsive"
                       />
                     </button>
-                    {isOpen && layerCustomization()}
+                    {isOpen && layerCustomization(generatedImage)}
                   </div>
                 ))}
               </div>
@@ -648,7 +786,7 @@ export default function art_generation() {
                       />
                     </button>
 
-                    {isOpen && layerCustomization()}
+                    {isOpen && layerCustomization("")}
                   </div>
                 ))}
               </div>
