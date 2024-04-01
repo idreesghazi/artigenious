@@ -2,12 +2,12 @@
 
 import Image from "next/image";
 import { useState, useEffect } from "react";
-// import Link from "next/link";
+import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import axios from "axios";
 
 import {
-  Link,
+  Link as ScrollLink,
   Button,
   Element,
   Events,
@@ -195,7 +195,7 @@ export default function Home() {
               </div>
             </div>
             <div className="flex p-6 space-x-20 mr-20">
-              <Link
+              <ScrollLink
                 to="home"
                 spy={true}
                 smooth={true}
@@ -204,8 +204,8 @@ export default function Home() {
                 className="font-mont font-semibold text-black hover:text-orange-400 text-xl"
               >
                 Home
-              </Link>
-              <Link
+              </ScrollLink>
+              <ScrollLink
                 to="services"
                 spy={true}
                 smooth={true}
@@ -214,8 +214,8 @@ export default function Home() {
                 className="font-mont font-semibold text-black hover:text-orange-400 text-xl"
               >
                 Services
-              </Link>
-              <Link
+              </ScrollLink>
+              <ScrollLink
                 to="packages"
                 spy={true}
                 smooth={true}
@@ -224,7 +224,7 @@ export default function Home() {
                 className="font-mont font-semibold text-black hover:text-orange-400 text-xl"
               >
                 Packages
-              </Link>
+              </ScrollLink>
               {status !== "authenticated" ? (
                 <div>
                   {userData !== "nothing" ? (
@@ -268,7 +268,6 @@ export default function Home() {
                     ],
                     autoStart: true,
                     loop: true,
-                    
                   }}
                 />
               </h1>
