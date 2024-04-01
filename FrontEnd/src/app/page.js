@@ -268,13 +268,14 @@ export default function Home() {
                     ],
                     autoStart: true,
                     loop: true,
+                    
                   }}
                 />
               </h1>
               <h2
                 data-aos="fade-up"
                 data-aos-duration="2000"
-                data-aos-anchor-placement="top-center"
+                // data-aos-anchor-placement="top-center"
                 className="font-poppins font-normal md:text-2xl text-gray-600 lg:text-xl pr-6"
               >
                 Where your imagination sparks into reality through the power of
@@ -342,7 +343,7 @@ export default function Home() {
                         </h1>
                       </div>
                       <div className="ml-auto flex flex-row space-x-4 mb-2">
-                        <select
+                        {/* <select
                           className="px-4 py-2 bg-white text-black rounded-xl mt-1"
                           value={chatbotModel}
                           onChange={handleSelectionBoxChange}
@@ -359,7 +360,7 @@ export default function Home() {
                             width={20}
                             height={20}
                           />
-                        </button>
+                        </button> */}
                       </div>
                     </div>
 
@@ -392,7 +393,8 @@ export default function Home() {
                           </div>
                         ))}
                       <div className="bg-white text-black shadow-md border-2 border-gray-200 text-center rounded-lg px-4 py-2">
-                        Selected Model: {selectedModel}
+                        Ask Anything...
+                        {/* Selected Model: {selectedModel} */}
                       </div>
                     </div>
 

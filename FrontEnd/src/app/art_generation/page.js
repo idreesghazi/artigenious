@@ -724,7 +724,7 @@ export default function art_generation() {
                   onClick={() => {
                     toggleModal();
                   }}
-                  className="w-full rounded-lg overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105"
+                  className="w-80 rounded-lg overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105"
                 >
                   <Image
                     src={generatedImage}
