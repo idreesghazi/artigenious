@@ -13,9 +13,15 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
+
+modelid2 = "idreesghazi/stable-diffusion-compvis-trained-on-anime-dataset"
+
 modelid = "CompVis/stable-diffusion-v1-4"
+
 device = "cuda"
+
 pipe = StableDiffusionPipeline.from_pretrained(modelid, revision="fp16", torch_dtype=torch.float16, use_auth_token=auth_token)
+
 pipe.to(device)
 
 
@@ -50,8 +56,8 @@ def generate():
         
         # Generate a random filename
         letters = string.ascii_lowercase
-        filename = ''.join(random.choice(letters) for i in range(10)) + ".jpg"
-
+        # filename = ''.join(random.choice(letters) for i in range(10)) + ".jpg"
+        filename = "generated_image.jpg"
          # Get the current directory
         current_directory = os.getcwd()
 

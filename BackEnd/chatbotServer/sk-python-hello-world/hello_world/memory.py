@@ -97,7 +97,63 @@ async def populate_memory(kernel: sk.Kernel, store_name, model) -> None:
         #     print("Populating for info", count)
         #     time.sleep(25)
 
+async def setMyKernel(query, model, store_name) -> None:
 
+    api_key, org_id = sk.openai_settings_from_dot_env()
+
+    if model == "Hugging Face":
+        kernel2 = sk2.Kernel()
+        print("Setting up Hugging Face...")
+        kernel2.add_text_completion_service(
+            "google/flan-t5-large", HuggingFaceTextCompletion(
+                "google/flan-t5-large")
+        )
+
+        kernel2.add_text_embedding_generation_service(
+            "sentence-transformers/all-mpnet-base-v2", HuggingFaceTextEmbedding(
+                "sentence-transformers/all-mpnet-base-v2")
+        )
+        kernel2.register_memory_store(
+            memory_store=sk2.memory.VolatileMemoryStore())
+        kernel2.import_skill(sk2.core_skills.TextMemorySkill())
+
+        print("Populating memory...")
+        await populate_memory(kernel2, store_name, model)
+
+        # print("Asking questions... (manually)")
+        # await search_memory_examples(kernel)
+
+        print("Setting up a chat (with memory!)")
+        chat_func, context = await setup_chat_with_memory(kernel2)
+
+        print("Begin chatting (type 'exit' to exit):\n")
+
+        return await chat(kernel2, chat_func, context, model, query)
+
+    elif model == "OpenAI":
+        kernel = sk.Kernel()
+        print("Setting up OpenAI API key...")
+        kernel.add_chat_service("chat-gpt", OpenAIChatCompletion("davinci", api_key, org_id))
+        print("Setting up OpenAI text completion...")
+        kernel.add_text_embedding_generation_service("ada", OpenAITextEmbedding("text-embedding-ada-002", api_key, org_id))
+        print("adding memory store...")
+        kernel.register_memory_store(
+            memory_store=sk.memory.VolatileMemoryStore())
+        print("importing skill...")
+        kernel.import_skill(sk.core_skills.TextMemorySkill())
+
+        print("Populating memory...")
+        await populate_memory(kernel, store_name, model)
+
+        # print("Asking questions... (manually)")
+        # await search_memory_examples(kernel)
+
+        print("Setting up a chat (with memory!)")
+        chat_func, context = await setup_chat_with_memory(kernel)
+
+        print("Begin chatting (type 'exit' to exit):\n")
+        return await chat(kernel, chat_func, context, model, query)
+    
 async def search_memory_examples(kernel: sk.Kernel, query) -> None:
     result = await kernel.memory.search_async("aboutMe", query, limit=1)
     return result
