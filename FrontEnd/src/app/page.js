@@ -2,9 +2,18 @@
 
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import Link from "next/link";
+// import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import axios from "axios";
+
+import {
+  Link,
+  Button,
+  Element,
+  Events,
+  animateScroll as scroll,
+  scrollSpy,
+} from "react-scroll";
 
 import orangeLogo from "./images/orangeLogo.png";
 import textArti from "./images/textArti.png";
@@ -186,24 +195,36 @@ export default function Home() {
               </div>
             </div>
             <div className="flex p-6 space-x-20 mr-20">
-              <a
-                href="#home"
+              <Link
+                to="home"
+                spy={true}
+                smooth={true}
+                offset={-30}
+                duration={600}
                 className="font-mont font-semibold text-black hover:text-orange-400 text-xl"
               >
                 Home
-              </a>
-              <a
-                href="#services"
+              </Link>
+              <Link
+                to="services"
+                spy={true}
+                smooth={true}
+                offset={-30}
+                duration={600}
                 className="font-mont font-semibold text-black hover:text-orange-400 text-xl"
               >
                 Services
-              </a>
-              <a
-                href="#packages"
+              </Link>
+              <Link
+                to="packages"
+                spy={true}
+                smooth={true}
+                offset={-30}
+                duration={600}
                 className="font-mont font-semibold text-black hover:text-orange-400 text-xl"
               >
                 Packages
-              </a>
+              </Link>
               {status !== "authenticated" ? (
                 <div>
                   {userData !== "nothing" ? (
@@ -405,7 +426,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <div id="services" className="bg-[#DE8833] py-24">
+        <div className="services bg-[#DE8833] py-24">
           <div className="flex flex-col items-center">
             <h1
               data-aos="fade-right"
@@ -477,7 +498,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div id="packages" className="bg-[#FFFAF3] ">
+        <div className="packages bg-[#FFFAF3] ">
           <div className="flex flex-col items-center">
             <h1 className="font-smooch font-bold text-black text-6xl p-10">
               Creator Packages
@@ -515,7 +536,7 @@ export default function Home() {
                   </ul>
                 </div>
 
-                <button className="bg-[#1C1C1C] w-full font-poppins px-14 py-4 mb-10 transition-transform duration-100 hover:bg-[#334187] hover:font-bold rounded-2xl text-xl text-white">
+                <button className="bg-[#1C1C1C] w-full font-poppins px-14 py-4 mb-10 transition-transform duration-100 hover:bg-[#] hover:font-bold rounded-2xl text-xl text-white">
                   Get it Now!
                 </button>
               </div>

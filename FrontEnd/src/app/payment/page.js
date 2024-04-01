@@ -2,13 +2,20 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import Link from "next/link";
+// import Link from "next/link";
 import Cookie from "js-cookie";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { loadStripe } from "@stripe/stripe-js";
 import { useSession, signOut } from "next-auth/react";
-
+import {
+  Link,
+  Button,
+  Element,
+  Events,
+  animateScroll as scroll,
+  scrollSpy,
+} from "react-scroll";
 import orangeLogo from "../images/orangeLogo.png";
 import textArti from "../images/textArti.png";
 import apocCatHome from "../images/apocCatHome.png";
@@ -24,7 +31,7 @@ import visaLogo from "../images/visaLogo.png";
 import mastercardLogo from "../images/mastercardLogo.png";
 import easypaisaLogo from "../images/easypaisaLogo.png";
 import jazzcashLogo from "../images/jazzCashLogo.png";
-import { checkout } from '@/checkout';
+import { checkout } from "@/checkout";
 
 export default function payment() {
   const { status } = useSession();
@@ -87,14 +94,22 @@ export default function payment() {
       <div className="flex justify-between">
         <h1 className="font-smooch text-6xl font-bold p-4">Payment System</h1>
         <div className="p-6 space-x-20 mr-20">
-          <a
-            href="#home"
+          <Link
+            spy={true}
+            smooth={true}
+            offset={50}
+            duration={500}
+            to="home"
             className="font-mont font-semibold text-black hover:text-orange-400 text-xl"
           >
             Home
-          </a>
+          </Link>
           <a
-            href="#services"
+            spy={true}
+            smooth={true}
+            offset={50}
+            duration={500}
+            to="home"
             className="font-mont font-semibold text-black hover:text-orange-400 text-xl"
           >
             Services
@@ -106,14 +121,17 @@ export default function payment() {
             Packages
           </a>
           {status !== "authenticated" ? (
-            <Link href="/login">
+            <Link to="/login">
               <button className="font-mont font-semibold text-[#8155FF] duration-100 transition-transform hover:scale-110 hover:text-blue-900 text-xl">
                 Login
               </button>
             </Link>
           ) : (
             <Link href="/">
-              <button onClick={()=> signOut()} className="font-mont font-semibold text-[#8155FF] duration-100 transition-transform hover:scale-110 hover:text-blue-900 text-xl">
+              <button
+                onClick={() => signOut()}
+                className="font-mont font-semibold text-[#8155FF] duration-100 transition-transform hover:scale-110 hover:text-blue-900 text-xl"
+              >
                 Logout
               </button>
             </Link>
@@ -291,7 +309,15 @@ export default function payment() {
               </div>
             </div>
             <button
-            onClick={(()=>checkout({lineItems: [{price: 'price_1Os5CcIq4eA6e3CWY31RAzP9', quantity: 1}], successUrl: 'http://localhost:3000/success', cancelUrl: 'http://localhost:3000/cancel'}) )}                     
+              onClick={() =>
+                checkout({
+                  lineItems: [
+                    { price: "price_1Os5CcIq4eA6e3CWY31RAzP9", quantity: 1 },
+                  ],
+                  successUrl: "http://localhost:3000/success",
+                  cancelUrl: "http://localhost:3000/cancel",
+                })
+              }
               // onClick={handleCheckout}
               className="bg-black text-white py-4 font-semibold px-6 rounded-2xl mt-4 w-full hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-opacity-50 transition-all"
             >
