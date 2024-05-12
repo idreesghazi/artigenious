@@ -27,6 +27,7 @@ pipe.to(device)
 
 @app.route('/generate', methods=['POST'])
 def generate():
+    print("Using idreesghazi/stable-diffusion-compvis-trained-on-anime-dataset")
     print("Request received")                                                                                       
     try:
         data = request.get_json()

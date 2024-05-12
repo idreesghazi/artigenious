@@ -1,0 +1,246 @@
+NFT Generation Prompts Dataset
+Entry 1
+Prompt ID: NFT001
+Category: Cyberpunk Cities
+Subcategory: Nightscapes
+Textual Description: Neon-lit skyscrapers under a digital rain.
+Keywords: Neon, skyscrapers, digital rain
+Color Scheme: Neon blue, pink, black
+Entry 2
+Prompt ID: NFT002
+Category: Mythical Creatures
+Subcategory: Dragons
+Textual Description: A dragon with iridescent scales perched on a cliff.
+Keywords: Iridescent, dragon, cliff
+Color Scheme: Multicolor, gold, green
+Entry 3
+Prompt ID: NFT003
+Category: Abstract Art
+Subcategory: Geometric Shapes
+Textual Description: Interlocking geometric shapes with a holographic finish.
+Keywords: Geometric, interlocking, holographic
+Color Scheme: Holographic spectrum
+Entry 4
+Prompt ID: NFT004
+Category: Space Exploration
+Subcategory: Alien Planets
+Textual Description: An alien planet landscape with two suns setting.
+Keywords: Alien planet, two suns, landscape
+Color Scheme: Orange, red, purple
+Entry 5
+Prompt ID: NFT005
+Category: Underwater Worlds
+Subcategory: Coral Reefs
+Textual Description: A vibrant coral reef teeming with neon fish.
+Keywords: Coral reef, neon fish, vibrant
+Color Scheme: Neon green, blue, orange
+Entry 6
+Prompt ID: NFT006
+Category: Dystopian Landscapes
+Subcategory: Ruins
+Textual Description: A futuristic city in ruins overgrown with nature.
+Keywords: Futuristic, ruins, overgrown
+Color Scheme: Grey, green, brown
+Entry 7
+Prompt ID: NFT007
+Category: Fantasy Forests
+Subcategory: Enchanted
+Textual Description: An enchanted forest with glowing flowers and mist.
+Keywords: Enchanted, glowing flowers, mist
+Color Scheme: Violet, blue, green
+Entry 8
+Prompt ID: NFT008
+Category: Sci-Fi Gadgets
+Subcategory: Weapons
+Textual Description: A plasma rifle with intricate designs and glowing parts.
+Keywords: Plasma rifle, intricate, glowing
+Color Scheme: Silver, neon green, black
+Entry 9
+Prompt ID: NFT009
+Category: Post-Apocalyptic
+Subcategory: Vehicles
+Textual Description: A rugged, armored vehicle in a wasteland.
+Keywords: Rugged, armored vehicle, wasteland
+Color Scheme: Rust, grey, brown
+Entry 10
+Prompt ID: NFT010
+Category: Steampunk
+Subcategory: Airships
+Textual Description: A Victorian-style airship with steam engines.
+Keywords: Victorian, airship, steam engines
+Color Scheme: Bronze, brown, ivory
+Entry 11
+Prompt ID: NFT011
+Category: Virtual Reality
+Subcategory: Avatars
+Textual Description: A digital avatar with cybernetic enhancements.
+Keywords: Digital avatar, cybernetic, enhancements
+Color Scheme: Neon blue, silver, black
+Entry 12
+Prompt ID: NFT012
+Category: Cyber Animals
+Subcategory: Mechanical Pets
+Textual Description: A robotic dog with LED eyes and a metallic body.
+Keywords: Robotic dog, LED eyes, metallic
+Color Scheme: Chrome, red, black
+Entry 13
+Prompt ID: NFT013
+Category: Futuristic Fashion
+Subcategory: Cyberwear
+Textual Description: Futuristic clothing with holographic accessories.
+Keywords: Futuristic, holographic, clothing
+Color Scheme: Transparent, neon accents
+Entry 14
+Prompt ID: NFT014
+Category: Galactic Empires
+Subcategory: Starships
+Textual Description: A battle-worn starship cruising through an asteroid belt.
+Keywords: Battle-worn, starship, asteroid belt
+Color Scheme: Dark grey, white, orange
+Entry 15
+Prompt ID: NFT015
+Category: Neo-Tokyo Streets
+Subcategory: Marketplaces
+Textual Description: A bustling marketplace in Neo-Tokyo with holographic signs.
+Keywords: Marketplace, Neo-Tokyo, holographic signs
+Color Scheme: Neon signs, diverse
+Entry 16
+Prompt ID: NFT016
+Category: Ancient Civilizations
+Subcategory: Temples
+Textual Description: An ancient temple with hidden magical runes.
+Keywords: Ancient temple, magical runes, hidden
+Color Scheme: Stone, gold, moss green
+Entry 17
+Prompt ID: NFT017
+Category: Urban Legends
+Subcategory: Cryptids
+Textual Description: A shadowy figure of urban legend in a misty alley.
+Keywords: Shadowy figure, urban legend, misty alley
+Color Scheme: Black, grey, mist
+Entry 18
+Prompt ID: NFT018
+Category: Medieval Battles
+Subcategory: Knights
+Textual Description: A knight in shining armor with a fiery sword.
+Keywords: Knight, shining armor, fiery sword
+Color Scheme: Metallic, fire
+Entry 19
+Prompt ID: NFT019
+Category: Arctic Expeditions
+Subcategory: Ice Caves
+Textual Description: An explorer discovering a hidden ice cave with glowing crystals.
+Keywords: Explorer, ice cave, glowing crystals
+Color Scheme: Ice blue, white, crystal glow
+Entry 20
+Prompt ID: NFT020
+Category: Magical Artifacts
+Subcategory: Cursed Objects
+Textual Description: A cursed amulet with ancient inscriptions emitting dark energy.
+Keywords: Cursed amulet, ancient inscriptions, dark energy
+Color Scheme: Black, purple, silver
+
+
+Eyes Traits
+Entry 21
+Prompt ID: NFT021
+Category: Eyes
+Subcategory: Galactic Gaze
+Textual Description: Eyes that reflect a starry galaxy, with swirling nebulas and twinkling stars.
+Keywords: Starry, galaxy, nebulas, twinkling
+Color Scheme: Deep space blue, star white, nebula pink
+Entry 22
+Prompt ID: NFT022
+Category: Eyes
+Subcategory: Cybernetic Vision
+Textual Description: Futuristic cybernetic eyes with holographic HUD displays.
+Keywords: Cybernetic, holographic, HUD
+Color Scheme: Neon blue, silver, digital green
+Entry 23
+Prompt ID: NFT023
+Category: Eyes
+Subcategory: Mystic Orbs
+Textual Description: Eyes that glow with an ethereal light, pulsing with magical energy.
+Keywords: Ethereal, glowing, magical energy
+Color Scheme: Ethereal violet, pulsing green, mystic silver
+Dresses Traits
+Entry 24
+Prompt ID: NFT024
+Category: Dresses
+Subcategory: Victorian Elegance
+Textual Description: An elaborate Victorian dress with lace detailing and silk ribbons.
+Keywords: Victorian, lace detailing, silk ribbons
+Color Scheme: Ivory, pastel blue, gold accents
+Entry 25
+Prompt ID: NFT025
+Category: Dresses
+Subcategory: Cyberpunk Streetwear
+Textual Description: A streetwear outfit combining traditional fabrics with futuristic, light-up elements.
+Keywords: Streetwear, futuristic, light-up
+Color Scheme: Neon green, black, reflective silver
+Entry 26
+Prompt ID: NFT026
+Category: Dresses
+Subcategory: Tribal Warrior
+Textual Description: A warrior's attire adorned with tribal patterns and natural armor elements.
+Keywords: Tribal, warrior, natural armor
+Color Scheme: Earth tones, leather brown, feather white
+Backgrounds Traits
+Entry 27
+Prompt ID: NFT027
+Category: Backgrounds
+Subcategory: Ancient Temples
+Textual Description: The ruins of an ancient temple, overgrown with jungle flora under a setting sun.
+Keywords: Ancient temple, jungle flora, setting sun
+Color Scheme: Stone grey, jungle green, sunset orange
+Entry 28
+Prompt ID: NFT028
+Category: Backgrounds
+Subcategory: Underwater City
+Textual Description: A mesmerizing underwater city with bioluminescent buildings and marine life.
+Keywords: Underwater, bioluminescent, marine life
+Color Scheme: Deep blue, glowing turquoise, coral pink
+Entry 29
+Prompt ID: NFT029
+Category: Backgrounds
+Subcategory: Sakura Blossom Park
+Textual Description: A tranquil park during sakura blossom season, with petals gently falling onto traditional stone paths.
+Keywords: Sakura blossom, tranquil, stone paths
+Color Scheme: Soft pink, white, spring green
+Cultural Themes
+Entry 30
+Prompt ID: NFT030
+Category: Cultural Themes
+Subcategory: Japanese Samurai
+Textual Description: A samurai in full armor standing before a Shinto shrine, cherry blossoms in the background.
+Keywords: Samurai, Shinto shrine, cherry blossoms
+Color Scheme: Armor black, cherry blossom pink, shrine red
+Entry 31
+Prompt ID: NFT031
+Category: Cultural Themes
+Subcategory: Nordic Vikings
+Textual Description: A Viking warrior looking out over a fjord, with a longship in the distance and northern lights above.
+Keywords: Viking, fjord, northern lights
+Color Scheme: Fjord blue, longship brown, aurora green
+Entry 32
+Prompt ID: NFT032
+Category: Cultural Themes
+Subcategory: Maasai Traditions
+Textual Description: A Maasai warrior in traditional attire standing on the African savannah at sunset.
+Keywords: Maasai, traditional attire, savannah sunset
+Color Scheme: Savannah gold, Maasai red, sunset orange
+Entry 33
+Prompt ID: NFT033
+Category: Cultural Themes
+Subcategory: Indian Festivals
+Textual Description: A vibrant scene of the Holi festival with people throwing colorful powders, against the backdrop of the Taj Mahal.
+Keywords: Holi festival, colorful powders, Taj Mahal
+Color Scheme: Multicolor powders, white Taj Mahal, blue sky
+Entry 34
+Prompt ID: NFT034
+Category: Cultural Themes
+Subcategory: Arabian Nights
+Textual Description: An Arabian desert under a starry night sky, with a silhouette of a caravan and a distant palace.
+Keywords: Arabian desert, starry night, caravan, palace
+Color Scheme: Desert sand, starry night blue, palace gold
+This expanded dataset focuses on generating specific traits for NFTs, emphasizing the importance of eyes, dresses, and backgrounds with cultural and thematic variety to inspire unique and visually captivating digital collectibles.
